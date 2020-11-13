@@ -1,9 +1,7 @@
 import { memoizeWith } from "ramda";
 import { css } from "styled-components";
 import { CSSProperties } from "react";
-import { isString } from "@worksolutions/utils";
-
-import { string1 } from "../../../libs/src/stringMemoHelper";
+import { isString, string1 } from "@worksolutions/utils";
 
 export const stringOrPixels = (value: number | string) => (isString(value) ? value : `${value}px`);
 

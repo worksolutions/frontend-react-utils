@@ -1,8 +1,8 @@
 import { memoizeWith } from "ramda";
 import { css } from "styled-components";
+import { string1, string2, string3 } from "@worksolutions/utils";
 
 import { stringOrPixels } from "./common";
-import { string1, string2, string3 } from "../../../libs/src/stringMemoHelper";
 
 export const getColor__maker = <T extends Record<string, string>>(colors: T) => (color: keyof T | string) =>
   (colors[color] || color) as string;

@@ -1,8 +1,7 @@
 import { memoizeWith } from "ramda";
 import { css } from "styled-components";
 import { CSSProperties } from "react";
-
-import { string1 } from "../../../libs/src/stringMemoHelper";
+import { string1 } from "@worksolutions/utils";
 
 export const transform = memoizeWith(
   string1,

@@ -1,8 +1,8 @@
 import { css } from "styled-components";
 import { memoizeWith } from "ramda";
 import { CSSProperties } from "react";
+import { string1, string2, string3 } from "@worksolutions/utils";
 
-import { string1, string2, string3 } from "../../../libs/src/stringMemoHelper";
 import { stringOrPixels } from "./common";
 
 export const border__maker = <T>(getColor: (color: T) => string) =>

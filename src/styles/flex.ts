@@ -1,8 +1,8 @@
 import { css } from "styled-components";
 import { memoizeWith } from "ramda";
 import { CSSProperties } from "react";
+import { string1 } from "@worksolutions/utils";
 
-import { string1 } from "../../../libs/src/stringMemoHelper";
 import { stringOrPixels } from "./common";
 
 export const flex = css`
