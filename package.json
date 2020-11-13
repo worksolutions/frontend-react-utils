@@ -1,7 +1,7 @@
 {
   "name": "@worksolutions/react-utils",
   "private": false,
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -28,7 +28,7 @@
     "@types/react": "^16.*",
     "@types/resize-observer-browser": "*",
     "@types/styled-components": "^5.*",
-    "@worksolutions/utils": "^1.0.17",
+    "@worksolutions/utils": "^1.0.18",
     "lodash": "^4.*",
     "ramda": "^0.27.*",
     "react": "^17.*",
