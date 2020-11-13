@@ -4,7 +4,7 @@ import { string1, string2, string3 } from "@worksolutions/utils";
 
 import { stringOrPixels } from "./common";
 
-export const getColor__maker = <T extends Record<string, string>>(colors: T) => (color: keyof T | string) =>
+export const getColor__maker = <T extends Record<string, string>>(colors: T) => (color: keyof T) =>
   (colors[color] || color) as string;
 
 export const createLinearGradientColor__maker = <T>(getColor: (color: T) => string) =>
