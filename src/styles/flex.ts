@@ -76,3 +76,10 @@ export const ai = memoizeWith(
     align-items: ${value};
   `,
 );
+
+export const order = memoizeWith(
+  string1,
+  (value: CSSProperties["order"]) => css`
+    order: ${value};
+  `,
+);
