@@ -1,7 +1,4 @@
 import { css } from "styled-components";
-import { isString } from "@worksolutions/utils";
-
-export const stringOrPixels = (value: number | string) => (isString(value) ? value : `${value}px`);
 
 export const hover = (styles: any, childSelector = "") => css`
   :hover ${childSelector} {
