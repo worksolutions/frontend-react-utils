@@ -21,7 +21,7 @@ export const whiteSpace = memoizeWith(
 
 export const lineHeight = memoizeWith(
   string1,
-  (value: number) => css`
+  (value: number | string) => css`
     line-height: ${stringOrPixels(value)};
   `,
 );
