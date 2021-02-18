@@ -23,9 +23,3 @@ export const nthChild = (selector: string | number, styles: any, preSelector = "
     ${styles};
   }
 `;
-
-export const stylesForSelector = (selector: string | number, styles: any) => css`
-  ${selector} {
-    ${styles};
-  }
-`;
