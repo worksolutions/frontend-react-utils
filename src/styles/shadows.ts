@@ -2,6 +2,7 @@ import { memoizeWith } from "ramda";
 import { css } from "styled-components";
 
 import { stringOrPixels } from "./common";
+import { COLOR_NAME_TYPE, GetColorType, StyledComponentsPropsWithTheme } from "./colorTypes";
 
 export type BoxShadowTypeMaker<Colors> = [
   number | string,
@@ -12,22 +13,26 @@ export type BoxShadowTypeMaker<Colors> = [
   boolean?,
 ];
 
-export const boxShadowString__maker = <T, BoxShadow extends BoxShadowTypeMaker<T>>(getColor: (color: T) => string) =>
+export const boxShadowString__maker = <
+  COLOR_NAME extends COLOR_NAME_TYPE,
+  BOX_SHADOW extends BoxShadowTypeMaker<COLOR_NAME>
+>(
+  getColor: GetColorType<COLOR_NAME>,
+) => (props: StyledComponentsPropsWithTheme<COLOR_NAME>) =>
   memoizeWith(
     (data) => JSON.stringify(data),
-    ([offsetX, offsetY, blurRadius, spread, color, inset]: BoxShadow) =>
+    ([offsetX, offsetY, blurRadius, spread, color, inset]: BOX_SHADOW) =>
       `${inset ? "inset " : ""}${stringOrPixels(offsetX)} ${stringOrPixels(offsetY)} ${stringOrPixels(
         blurRadius,
-      )} ${stringOrPixels(spread)} ${getColor(color)}`,
+      )} ${stringOrPixels(spread)} ${getColor(color)(props)}`,
   );
 
-export const boxShadow__maker = <T, BoxShadow extends BoxShadowTypeMaker<T>>(
-  getColor: (color: T) => string,
-  makeBorderBoxShadow: (borderBox: BoxShadow) => string,
+export const boxShadow__maker = <COLOR_NAME extends COLOR_NAME_TYPE, BOX_SHADOW extends BoxShadowTypeMaker<COLOR_NAME>>(
+  makeBorderBoxShadow: (props: StyledComponentsPropsWithTheme<COLOR_NAME>) => (borderBox: BOX_SHADOW) => string,
 ) =>
   memoizeWith(
     (...shadows) => JSON.stringify(shadows),
-    (...shadows: BoxShadow[]) => css`
-      box-shadow: ${shadows.map(makeBorderBoxShadow).join(", ")};
+    (...shadows: BOX_SHADOW[]) => css`
+      box-shadow: ${(props) => shadows.map(makeBorderBoxShadow(props)).join(", ")};
     `,
   );

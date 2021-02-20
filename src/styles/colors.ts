@@ -1,49 +1,35 @@
 import { memoizeWith } from "ramda";
 import { css } from "styled-components";
-import { string1, string2, string3 } from "@worksolutions/utils";
+import { path, string1, string2 } from "@worksolutions/utils";
 
-import { stringOrPixels } from "./common";
+import { COLOR_NAME_TYPE, GetColorType, Theme } from "./colorTypes";
 
-export const getColor__maker = <T extends Record<string, string>>(colors: T) => (color: keyof T) =>
-  (colors[color] || color) as string;
+export const getColor__maker = <COLORS extends Record<COLOR_NAME_TYPE, string>>(): GetColorType<keyof COLORS> => (
+  colorName,
+) => (props) => {
+  const resultColorName = colorName.toString();
+  if (resultColorName.startsWith("overrides")) return path(resultColorName, props.theme);
+  return props.theme.colors[colorName] || colorName;
+};
 
-export const createLinearGradientColor__maker = <T>(getColor: (color: T) => string) =>
-  memoizeWith(
-    string3,
-    (fromColor: T, toColor: T, angle: number) =>
-      `linear-gradient(${angle}, ${getColor(fromColor)} 0%, ${getColor(toColor)} 100%)`,
-  );
-
-export const createRadialGradientColor__maker = <T>(getColor: (color: T) => string) =>
-  memoizeWith(
-    (data) => JSON.stringify(data),
-    (
-      { color: fromColor, filling: fromFilling }: { color: T; filling?: string },
-      { color: toColor, filling: toFilling }: { color: T; filling?: string },
-      { x, y }: { x: string | number; y: string | number } = { x: "center", y: "center" },
-    ) => {
-      const pos = `at ${stringOrPixels(x)} ${stringOrPixels(y)}`;
-      const from = `${getColor(fromColor)} ${fromFilling || ""}`;
-      const to = `${getColor(toColor)} ${toFilling || ""}`;
-      return `radial-gradient(${pos}, ${from}, ${to})`;
-    },
-  );
-
-export const createAlphaColor__maker = <T>(getColor: (color: T) => string) =>
-  memoizeWith(string2, (color: T, alpha: number) => `${getColor(color)}${alpha.toString(16).padStart(2, "0")}`);
-
-export const color__maker = <T>(getColor: (color: T) => string) =>
-  memoizeWith(string1, (value: T) => {
-    const color = getColor(value);
+export const color__maker = <COLOR_NAME extends COLOR_NAME_TYPE>(getColor: GetColorType<COLOR_NAME>) =>
+  memoizeWith(string1, (colorName: COLOR_NAME) => {
     return css`
-      color: ${color};
+      color: ${getColor(colorName)};
     `;
   });
 
-export const fillColor__maker = <T>(getColor: (color: T) => string) =>
+export const createAlphaColor__maker = <COLOR_NAME extends COLOR_NAME_TYPE>(getColor: GetColorType<COLOR_NAME>) =>
+  memoizeWith(
+    string2,
+    (colorName: COLOR_NAME, alpha: number) =>
+      `${getColor(colorName)({ theme: {} as Theme<COLOR_NAME> })}${alpha.toString(16).padStart(2, "0")}` as COLOR_NAME,
+  );
+
+export const fillColor__maker = <COLOR_NAME extends COLOR_NAME_TYPE>(getColor: GetColorType<COLOR_NAME>) =>
   memoizeWith(
     string1,
-    (color: T) => css`
-      fill: ${getColor(color)};
+    (colorName: COLOR_NAME) => css`
+      fill: ${getColor(colorName)};
     `,
   );

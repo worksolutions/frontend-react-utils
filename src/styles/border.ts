@@ -4,12 +4,13 @@ import { CSSProperties } from "react";
 import { string1, string2, string3 } from "@worksolutions/utils";
 
 import { stringOrPixels } from "./common";
+import { COLOR_NAME_TYPE, GetColorType } from "./colorTypes";
 
-export const border__maker = <T>(getColor: (color: T) => string) =>
+export const border__maker = <COLOR_NAME extends COLOR_NAME_TYPE>(getColor: GetColorType<COLOR_NAME>) =>
   memoizeWith(
     string3,
-    (size: number, color: T, mode: CSSProperties["borderStyle"] = "solid") => css`
-      border: ${size}px ${mode} ${getColor(color)};
+    (size: number, colorName: COLOR_NAME, mode: CSSProperties["borderStyle"] = "solid") => css`
+      border: ${size}px ${mode} ${getColor(colorName)};
     `,
   );
 
@@ -21,50 +22,50 @@ export const borderWidth = memoizeWith(
     `,
 );
 
-export const borderColor__maker = <T>(getColor: (color: T) => string) =>
+export const borderColor__maker = <COLOR_NAME extends COLOR_NAME_TYPE>(getColor: GetColorType<COLOR_NAME>) =>
   memoizeWith(
     string1,
-    (color: T) => css`
+    (color: COLOR_NAME) => css`
       border-color: ${getColor(color)};
     `,
   );
 
-export const borderBottom__maker = <T>(getColor: (color: T) => string) =>
+export const borderBottom__maker = <COLOR_NAME extends COLOR_NAME_TYPE>(getColor: GetColorType<COLOR_NAME>) =>
   memoizeWith(
     string2,
-    (size: number, color: T) => css`
+    (size: number, color: COLOR_NAME) => css`
       border-bottom: ${size}px solid ${getColor(color)};
     `,
   );
 
-export const borderLeft__maker = <T>(getColor: (color: T) => string) =>
+export const borderLeft__maker = <COLOR_NAME extends COLOR_NAME_TYPE>(getColor: GetColorType<COLOR_NAME>) =>
   memoizeWith(
     string2,
-    (size: number, color: T) => css`
+    (size: number, color: COLOR_NAME) => css`
       border-left: ${size}px solid ${getColor(color)};
     `,
   );
 
-export const borderTop__maker = <T>(getColor: (color: T) => string) =>
+export const borderTop__maker = <COLOR_NAME extends COLOR_NAME_TYPE>(getColor: GetColorType<COLOR_NAME>) =>
   memoizeWith(
     string2,
-    (size: number, color: T) => css`
+    (size: number, color: COLOR_NAME) => css`
       border-top: ${size}px solid ${getColor(color)};
     `,
   );
 
-export const borderRight__maker = <T>(getColor: (color: T) => string) =>
+export const borderRight__maker = <COLOR_NAME extends COLOR_NAME_TYPE>(getColor: GetColorType<COLOR_NAME>) =>
   memoizeWith(
     string2,
-    (size: number, color: T) => css`
+    (size: number, color: COLOR_NAME) => css`
       border-right: ${size}px solid ${getColor(color)};
     `,
   );
 
-export const borderLeftColor__maker = <T>(getColor: (color: T) => string) =>
+export const borderLeftColor__maker = <COLOR_NAME extends COLOR_NAME_TYPE>(getColor: GetColorType<COLOR_NAME>) =>
   memoizeWith(
     string1,
-    (color: T) => css`
+    (color: COLOR_NAME) => css`
       border-left-color: ${getColor(color)};
     `,
   );

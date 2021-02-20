@@ -1,7 +1,7 @@
 import * as activations from "./activations";
 import * as animations from "./animations";
 import * as background from "./background";
-import * as borderM from "./border";
+import * as borderStyles from "./border";
 import * as children from "./children";
 import * as cleaner from "./cleaner";
 import * as colors from "./colors";
@@ -14,8 +14,11 @@ import * as shadows from "./shadows";
 import * as sizes from "./sizes";
 import * as text from "./text";
 import * as transform from "./transform";
+import { COLOR_NAME_TYPE } from "./colorTypes";
 
-export function buildStyles<T extends Record<string, string>>(colorsObject: T) {
+export * from "./colorTypes";
+
+export function buildStyles<COLORS extends COLOR_NAME_TYPE>() {
   const { backgroundColor__maker, ...otherBackground } = background;
   const {
     border__maker,
@@ -26,19 +29,11 @@ export function buildStyles<T extends Record<string, string>>(colorsObject: T) {
     borderRight__maker,
     borderTop__maker,
     ...otherBorder
-  } = borderM;
-  const {
-    color__maker,
-    createAlphaColor__maker,
-    createLinearGradientColor__maker,
-    createRadialGradientColor__maker,
-    fillColor__maker,
-    getColor__maker,
-    ...otherColors
-  } = colors;
+  } = borderStyles;
+  const { getColor__maker, color__maker, createAlphaColor__maker, fillColor__maker, ...otherColors } = colors;
   const { boxShadow__maker, boxShadowString__maker, ...otherShadows } = shadows;
 
-  const getColor = getColor__maker(colorsObject);
+  const getColor = getColor__maker<Record<COLORS, string>>();
 
   const backgroundColor = backgroundColor__maker(getColor);
   const border = border__maker(getColor);
@@ -50,11 +45,9 @@ export function buildStyles<T extends Record<string, string>>(colorsObject: T) {
   const borderTop = borderTop__maker(getColor);
   const color = color__maker(getColor);
   const createAlphaColor = createAlphaColor__maker(getColor);
-  const createLinearGradientColor = createLinearGradientColor__maker(getColor);
-  const createRadialGradientColor = createRadialGradientColor__maker(getColor);
   const fillColor = fillColor__maker(getColor);
   const boxShadowString = boxShadowString__maker(getColor);
-  const boxShadow = boxShadow__maker(getColor, boxShadowString);
+  const boxShadow = boxShadow__maker(boxShadowString);
 
   return {
     ...activations,
@@ -84,8 +77,6 @@ export function buildStyles<T extends Record<string, string>>(colorsObject: T) {
     borderTop,
     color,
     createAlphaColor,
-    createLinearGradientColor,
-    createRadialGradientColor,
     fillColor,
     boxShadowString,
     boxShadow,
