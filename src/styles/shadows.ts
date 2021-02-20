@@ -2,14 +2,14 @@ import { memoizeWith } from "ramda";
 import { css } from "styled-components";
 
 import { stringOrPixels } from "./common";
-import { COLOR_NAME_TYPE, GetColorType, StyledComponentsPropsWithTheme } from "./colorTypes";
+import { COLOR_NAME_TYPE, GetColorType, IncomeColorVariant, StyledComponentsPropsWithTheme } from "./colorTypes";
 
-export type BoxShadowTypeMaker<Colors> = [
+export type BoxShadowTypeMaker<COLOR_NAME extends COLOR_NAME_TYPE> = [
   number | string,
   number | string,
   number | string,
   number | string,
-  Colors,
+  IncomeColorVariant<COLOR_NAME>,
   boolean?,
 ];
 
