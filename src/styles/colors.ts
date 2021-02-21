@@ -7,9 +7,13 @@ import { COLOR_NAME_TYPE, GetColorType, IncomeColorVariant, StyledComponentsProp
 export const getColor__maker = <COLORS extends Record<COLOR_NAME_TYPE, string>>(): GetColorType<keyof COLORS> => (
   colorName,
 ) => (props) => {
-  const resultColorName = isFunction(colorName) ? colorName(props).toString() : colorName.toString();
-  if (resultColorName.startsWith("overrides")) return path(resultColorName, props.theme);
-  return props.theme.colors[resultColorName] || colorName;
+  const calculatedColorName = isFunction(colorName) ? colorName(props).toString() : colorName.toString();
+
+  const resultColorName = calculatedColorName.startsWith("definitions")
+    ? path(calculatedColorName, props.theme)
+    : calculatedColorName;
+
+  return props.theme.colors[resultColorName] || resultColorName;
 };
 
 export const color__maker = <COLOR_NAME extends COLOR_NAME_TYPE>(getColor: GetColorType<COLOR_NAME>) =>

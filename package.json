@@ -1,7 +1,7 @@
 {
   "name": "@worksolutions/react-utils",
   "private": false,
-  "version": "1.0.22",
+  "version": "1.0.23",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -18,8 +18,8 @@
   "license": "ISC",
   "declaration": true,
   "devDependencies": {
-    "prettier": "^2.*",
-    "typescript": "^4.0.*",
+    "prettier": "^2.2.1",
+    "typescript": "^4.1.5",
     "@types/node": "^*"
   },
   "dependencies": {
@@ -28,7 +28,7 @@
     "@types/react": "^16.*",
     "@types/resize-observer-browser": "*",
     "@types/styled-components": "^5.*",
-    "@worksolutions/utils": "^1.0.27",
+    "@worksolutions/utils": "^1.0.29",
     "lodash": "^4.*",
     "ramda": "^0.27.*",
     "react": "^17.*",

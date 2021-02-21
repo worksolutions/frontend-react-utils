@@ -2,7 +2,8 @@ import { memoizeWith } from "ramda";
 import { CSSProperties } from "react";
 import { css } from "styled-components";
 import { string1 } from "@worksolutions/utils";
-import { COLOR_NAME_TYPE, GetColorType } from "./colorTypes";
+
+import { COLOR_NAME_TYPE, GetColorType, IncomeColorVariant } from "./colorTypes";
 
 export const background = memoizeWith(
   string1,
@@ -14,7 +15,7 @@ export const background = memoizeWith(
 export const backgroundColor__maker = <COLOR_NAME extends COLOR_NAME_TYPE>(getColor: GetColorType<COLOR_NAME>) =>
   memoizeWith(
     string1,
-    (backgroundColorName: COLOR_NAME) => css`
+    (backgroundColorName: IncomeColorVariant<COLOR_NAME>) => css`
       background-color: ${getColor(backgroundColorName)};
     `,
   );
