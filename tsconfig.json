@@ -25,7 +25,8 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "declaration": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "noEmitOnError": true
   },
   "include": ["src"],
   "exclude": [
