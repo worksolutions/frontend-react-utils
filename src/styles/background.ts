@@ -12,13 +12,14 @@ export const background = memoizeWith(
   `,
 );
 
+export const backgroundColorWithoutMemoization__maker = <COLOR_NAME extends COLOR_NAME_TYPE>(
+  getColor: GetColorType<COLOR_NAME>,
+) => (backgroundColorName: IncomeColorVariant<COLOR_NAME>) => css`
+  background-color: ${getColor(backgroundColorName)};
+`;
+
 export const backgroundColor__maker = <COLOR_NAME extends COLOR_NAME_TYPE>(getColor: GetColorType<COLOR_NAME>) =>
-  memoizeWith(
-    string1,
-    (backgroundColorName: IncomeColorVariant<COLOR_NAME>) => css`
-      background-color: ${getColor(backgroundColorName)};
-    `,
-  );
+  memoizeWith(string1, backgroundColorWithoutMemoization__maker(getColor));
 
 export const backgroundImage = memoizeWith(
   string1,
