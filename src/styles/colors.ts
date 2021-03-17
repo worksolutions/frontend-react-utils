@@ -3,6 +3,7 @@ import { css } from "styled-components";
 import { isFunction, path, string1, string2 } from "@worksolutions/utils";
 
 import { COLOR_NAME_TYPE, GetColorType, IncomeColorVariant, StyledComponentsPropsWithTheme } from "./colorTypes";
+import { stringOrPixels } from "./common";
 
 export const getColor__maker = <COLORS extends Record<COLOR_NAME_TYPE, string>>(): GetColorType<keyof COLORS> => (
   colorName,
@@ -30,6 +31,28 @@ export const createAlphaColor__maker = <COLOR_NAME extends COLOR_NAME_TYPE>(getC
       `
         ${getColor(colorName)(props)}${alpha.toString(16).padStart(2, "0")}
       ` as COLOR_NAME,
+  );
+
+export interface RadialGradientPointInterface<COLOR extends COLOR_NAME_TYPE> {
+  color: COLOR;
+  filling?: string;
+}
+
+export const createRadialGradientColor__maker = <COLOR_NAME extends COLOR_NAME_TYPE>(
+  getColor: GetColorType<COLOR_NAME>,
+) =>
+  memoizeWith(
+    (...args) => JSON.stringify(args),
+    (
+      { color: fromColor, filling: fromFilling }: RadialGradientPointInterface<COLOR_NAME>,
+      { color: toColor, filling: toFilling }: RadialGradientPointInterface<COLOR_NAME>,
+      { x, y }: { x: string | number; y: string | number } = { x: "center", y: "center" },
+    ) => {
+      const pos = `at ${stringOrPixels(x)} ${stringOrPixels(y)}`;
+      const from = `${getColor(fromColor)} ${fromFilling || ""}`;
+      const to = `${getColor(toColor)} ${toFilling || ""}`;
+      return `radial-gradient(${pos}, ${from}, ${to})`;
+    },
   );
 
 export const fillColor__maker = <COLOR_NAME extends COLOR_NAME_TYPE>(getColor: GetColorType<COLOR_NAME>) =>

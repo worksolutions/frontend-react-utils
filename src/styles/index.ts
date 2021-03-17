@@ -30,7 +30,14 @@ export function buildStyles<COLORS extends COLOR_NAME_TYPE>() {
     borderTop__maker,
     ...otherBorder
   } = borderStyles;
-  const { getColor__maker, color__maker, createAlphaColor__maker, fillColor__maker, ...otherColors } = colors;
+  const {
+    getColor__maker,
+    color__maker,
+    createAlphaColor__maker,
+    createRadialGradientColor__maker,
+    fillColor__maker,
+    ...otherColors
+  } = colors;
   const { boxShadow__maker, boxShadowString__maker, ...otherShadows } = shadows;
 
   const getColor = getColor__maker<Record<COLORS, string>>();
@@ -46,6 +53,7 @@ export function buildStyles<COLORS extends COLOR_NAME_TYPE>() {
   const borderTop = borderTop__maker(getColor);
   const color = color__maker(getColor);
   const createAlphaColor = createAlphaColor__maker(getColor);
+  const createRadialGradientColor = createRadialGradientColor__maker(getColor);
   const fillColor = fillColor__maker(getColor);
   const boxShadowString = boxShadowString__maker(getColor);
   const boxShadow = boxShadow__maker(boxShadowString);
@@ -79,6 +87,7 @@ export function buildStyles<COLORS extends COLOR_NAME_TYPE>() {
     borderTop,
     color,
     createAlphaColor,
+    createRadialGradientColor,
     fillColor,
     boxShadowString,
     boxShadow,
