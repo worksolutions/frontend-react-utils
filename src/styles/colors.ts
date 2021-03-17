@@ -44,13 +44,13 @@ export const createRadialGradientColor__maker = <COLOR_NAME extends COLOR_NAME_T
   memoizeWith(
     (...args) => JSON.stringify(args),
     (
-      { color: fromColor, filling: fromFilling }: RadialGradientPointInterface<COLOR_NAME>,
-      { color: toColor, filling: toFilling }: RadialGradientPointInterface<COLOR_NAME>,
+      { color: fromColor, filling: fromFilling = "" }: RadialGradientPointInterface<COLOR_NAME>,
+      { color: toColor, filling: toFilling = "" }: RadialGradientPointInterface<COLOR_NAME>,
       { x, y }: { x: string | number; y: string | number } = { x: "center", y: "center" },
-    ) => {
+    ) => (props: StyledComponentsPropsWithTheme<COLOR_NAME>) => {
       const pos = `at ${stringOrPixels(x)} ${stringOrPixels(y)}`;
-      const from = `${getColor(fromColor)} ${fromFilling || ""}`;
-      const to = `${getColor(toColor)} ${toFilling || ""}`;
+      const from = `${getColor(fromColor)(props)} ${fromFilling}`;
+      const to = `${getColor(toColor)(props)} ${toFilling}`;
       return `radial-gradient(${pos}, ${from}, ${to})`;
     },
   );
