@@ -1,6 +1,7 @@
 import { css, Keyframes } from "styled-components";
 import { CSSProperties } from "react";
-import { isString, memoizeWithContext } from "@worksolutions/utils";
+import { isString, memoizeWithContext, string1 } from "@worksolutions/utils";
+import { memoizeWith } from "ramda";
 
 type AnimationArguments = {
   name: Keyframes;
@@ -45,4 +46,11 @@ export const animation = memoizeWithContext(
       ])};
     `;
   },
+);
+
+export const animationDuration = memoizeWith(
+  string1,
+  (value: CSSProperties["animationDuration"]) => css`
+    animation-duration: ${value};
+  `,
 );
