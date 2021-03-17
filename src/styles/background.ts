@@ -5,12 +5,14 @@ import { string1 } from "@worksolutions/utils";
 
 import { COLOR_NAME_TYPE, GetColorType, IncomeColorVariant } from "./colorTypes";
 
-export const background = memoizeWith(
-  string1,
-  (background: CSSProperties["background"]) => css`
-    background: ${background};
-  `,
-);
+export const backgroundWithoutMemoization__maker = <COLOR_NAME extends COLOR_NAME_TYPE>(
+  getColor: GetColorType<COLOR_NAME>,
+) => (colorName: IncomeColorVariant<COLOR_NAME>) => css`
+  background: ${getColor(colorName)};
+`;
+
+export const background__maker = <COLOR_NAME extends COLOR_NAME_TYPE>(getColor: GetColorType<COLOR_NAME>) =>
+  memoizeWith(string1, backgroundWithoutMemoization__maker(getColor));
 
 export const backgroundColorWithoutMemoization__maker = <COLOR_NAME extends COLOR_NAME_TYPE>(
   getColor: GetColorType<COLOR_NAME>,

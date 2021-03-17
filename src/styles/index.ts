@@ -1,6 +1,6 @@
 import * as activations from "./activations";
 import * as animations from "./animations";
-import * as background from "./background";
+import * as backgroundStyles from "./background";
 import * as borderStyles from "./border";
 import * as children from "./children";
 import * as cleaner from "./cleaner";
@@ -19,7 +19,13 @@ import { COLOR_NAME_TYPE } from "./colorTypes";
 export * from "./colorTypes";
 
 export function buildStyles<COLORS extends COLOR_NAME_TYPE>() {
-  const { backgroundColor__maker, backgroundColorWithoutMemoization__maker, ...otherBackground } = background;
+  const {
+    backgroundWithoutMemoization__maker,
+    background__maker,
+    backgroundColorWithoutMemoization__maker,
+    backgroundColor__maker,
+    ...otherBackground
+  } = backgroundStyles;
   const {
     border__maker,
     borderBottom__maker,
@@ -42,8 +48,10 @@ export function buildStyles<COLORS extends COLOR_NAME_TYPE>() {
 
   const getColor = getColor__maker<Record<COLORS, string>>();
 
-  const backgroundColor = backgroundColor__maker(getColor);
+  const backgroundWithoutMemoization = backgroundWithoutMemoization__maker(getColor);
+  const background = background__maker(getColor);
   const backgroundColorWithoutMemoization = backgroundColorWithoutMemoization__maker(getColor);
+  const backgroundColor = backgroundColor__maker(getColor);
   const border = border__maker(getColor);
   const borderBottom = borderBottom__maker(getColor);
   const borderColor = borderColor__maker(getColor);
@@ -76,8 +84,10 @@ export function buildStyles<COLORS extends COLOR_NAME_TYPE>() {
     ...text,
     ...transform,
     getColor,
-    backgroundColor,
+    backgroundWithoutMemoization,
+    background,
     backgroundColorWithoutMemoization,
+    backgroundColor,
     border,
     borderBottom,
     borderColor,

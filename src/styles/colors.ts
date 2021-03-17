@@ -28,9 +28,7 @@ export const createAlphaColor__maker = <COLOR_NAME extends COLOR_NAME_TYPE>(getC
   memoizeWith(
     string2,
     (colorName: IncomeColorVariant<COLOR_NAME>, alpha: number) => (props: StyledComponentsPropsWithTheme<COLOR_NAME>) =>
-      `
-        ${getColor(colorName)(props)}${alpha.toString(16).padStart(2, "0")}
-      ` as COLOR_NAME,
+      (getColor(colorName)(props) + alpha.toString(16).padStart(2, "0")) as COLOR_NAME,
   );
 
 export interface RadialGradientPointInterface<COLOR extends COLOR_NAME_TYPE> {
@@ -51,7 +49,7 @@ export const createRadialGradientColor__maker = <COLOR_NAME extends COLOR_NAME_T
       const pos = `at ${stringOrPixels(x)} ${stringOrPixels(y)}`;
       const from = `${getColor(fromColor)(props)} ${fromFilling}`;
       const to = `${getColor(toColor)(props)} ${toFilling}`;
-      return `radial-gradient(${pos}, ${from}, ${to})`;
+      return `radial-gradient(${pos}, ${from}, ${to})` as COLOR_NAME;
     },
   );
 
