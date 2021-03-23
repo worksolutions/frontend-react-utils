@@ -14,6 +14,7 @@ import * as shadows from "./shadows";
 import * as sizes from "./sizes";
 import * as text from "./text";
 import * as transform from "./transform";
+import * as filterStyles from "./filter";
 import { COLOR_NAME_TYPE } from "./colorTypes";
 
 export * from "./colorTypes";
@@ -40,6 +41,7 @@ export function buildStyles<COLORS extends COLOR_NAME_TYPE>() {
     getColor__maker,
     color__maker,
     createAlphaColor__maker,
+    createLinearGradientColor__maker,
     createRadialGradientColor__maker,
     fillColor__maker,
     ...otherColors
@@ -61,6 +63,7 @@ export function buildStyles<COLORS extends COLOR_NAME_TYPE>() {
   const borderTop = borderTop__maker(getColor);
   const color = color__maker(getColor);
   const createAlphaColor = createAlphaColor__maker(getColor);
+  const createLinearGradientColor = createLinearGradientColor__maker(getColor);
   const createRadialGradientColor = createRadialGradientColor__maker(getColor);
   const fillColor = fillColor__maker(getColor);
   const boxShadowString = boxShadowString__maker(getColor);
@@ -83,6 +86,7 @@ export function buildStyles<COLORS extends COLOR_NAME_TYPE>() {
     ...sizes,
     ...text,
     ...transform,
+    ...filterStyles,
     getColor,
     backgroundWithoutMemoization,
     background,
@@ -97,6 +101,7 @@ export function buildStyles<COLORS extends COLOR_NAME_TYPE>() {
     borderTop,
     color,
     createAlphaColor,
+    createLinearGradientColor,
     createRadialGradientColor,
     fillColor,
     boxShadowString,

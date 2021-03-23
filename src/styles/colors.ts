@@ -1,6 +1,6 @@
 import { memoizeWith } from "ramda";
 import { css } from "styled-components";
-import { isFunction, path, string1, string2 } from "@worksolutions/utils";
+import { isFunction, path, string1, string2, string3 } from "@worksolutions/utils";
 
 import { COLOR_NAME_TYPE, GetColorType, IncomeColorVariant, StyledComponentsPropsWithTheme } from "./colorTypes";
 import { stringOrPixels } from "./common";
@@ -29,6 +29,16 @@ export const createAlphaColor__maker = <COLOR_NAME extends COLOR_NAME_TYPE>(getC
     string2,
     (colorName: IncomeColorVariant<COLOR_NAME>, alpha: number) => (props: StyledComponentsPropsWithTheme<COLOR_NAME>) =>
       (getColor(colorName)(props) + alpha.toString(16).padStart(2, "0")) as COLOR_NAME,
+  );
+
+export const createLinearGradientColor__maker = <COLOR_NAME extends COLOR_NAME_TYPE>(
+  getColor: GetColorType<COLOR_NAME>,
+) =>
+  memoizeWith(
+    string3,
+    (fromColor: IncomeColorVariant<COLOR_NAME>, toColor: IncomeColorVariant<COLOR_NAME>, angle: number) => (
+      props: StyledComponentsPropsWithTheme<COLOR_NAME>,
+    ) => `linear-gradient(${angle}, ${getColor(fromColor)(props)} 0%, ${getColor(toColor)(props)} 100%)`,
   );
 
 export interface RadialGradientPointInterface<COLOR extends COLOR_NAME_TYPE> {
