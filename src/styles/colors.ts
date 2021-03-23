@@ -35,10 +35,15 @@ export const createLinearGradientColor__maker = <COLOR_NAME extends COLOR_NAME_T
   getColor: GetColorType<COLOR_NAME>,
 ) =>
   memoizeWith(
-    string3,
-    (fromColor: IncomeColorVariant<COLOR_NAME>, toColor: IncomeColorVariant<COLOR_NAME>, angle: number) => (
-      props: StyledComponentsPropsWithTheme<COLOR_NAME>,
-    ) => `linear-gradient(${angle}, ${getColor(fromColor)(props)} 0%, ${getColor(toColor)(props)} 100%)`,
+    (...args) => JSON.stringify(args),
+    (
+      [fromColor, fromPercent = 0]: [IncomeColorVariant<COLOR_NAME>, number?],
+      [toColor, toPercent = 100]: [IncomeColorVariant<COLOR_NAME>, number?],
+      angle: string = "0deg",
+    ) => (props: StyledComponentsPropsWithTheme<COLOR_NAME>) =>
+      `linear-gradient(${angle}, ${getColor(fromColor)(props)} ${fromPercent}%, ${getColor(toColor)(
+        props,
+      )} ${toPercent}%)` as COLOR_NAME,
   );
 
 export interface RadialGradientPointInterface<COLOR extends COLOR_NAME_TYPE> {
