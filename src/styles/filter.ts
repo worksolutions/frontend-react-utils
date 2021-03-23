@@ -9,3 +9,10 @@ export const filterStyle = memoizeWith(
     filter: ${transform};
   `,
 );
+
+export const backdropFilter = memoizeWith(
+  string1,
+  (transform: CSSProperties["backdropFilter"]) => css`
+    backdrop-filter: ${transform};
+  `,
+);
