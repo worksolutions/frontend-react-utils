@@ -7,3 +7,4 @@ export * from "./useChildrenWidthDetector";
 export * from "./useDebouncedInput";
 export * from "./useMeasure";
 export * from "./useTimer";
+export * from "./useStickyEffectDetector";
