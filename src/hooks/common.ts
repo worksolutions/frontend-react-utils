@@ -2,14 +2,17 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import debounce from "lodash/debounce";
 import { once } from "ramda";
 
-export function useBoolean(initial: boolean | (() => boolean)): [boolean, () => void, () => void] {
+export function useBoolean(initial: boolean | (() => boolean)) {
   const [state, setState] = useState(initial);
-  return [state, () => setState(true), () => setState(false)];
+  const enable = React.useCallback(() => setState(true), []);
+  const disable = React.useCallback(() => setState(false), []);
+  return [state, enable, disable] as const;
 }
 
-export function useToggle(initial: boolean | (() => boolean)): [boolean, () => void] {
+export function useToggle(initial: boolean | (() => boolean)) {
   const [state, setState] = useState(initial);
-  return [state, () => setState(!state)];
+  const toggle = React.useCallback(() => setState((state) => !state), []);
+  return [state, toggle] as const;
 }
 
 export const useOnce = (cb: (data?: any) => any, delay = 0) => {
