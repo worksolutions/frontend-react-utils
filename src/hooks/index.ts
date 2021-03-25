@@ -9,3 +9,4 @@ export * from "./useMeasure";
 export * from "./useTimer";
 export * from "./useStickyEffectDetector";
 export * from "./useEventEmitter";
+export * from "./useSyncToRef";
