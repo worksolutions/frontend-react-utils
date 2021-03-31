@@ -23,3 +23,9 @@ export const nthChild = (selector: string | number, styles: any, preSelector = "
     ${styles};
   }
 `;
+
+export const nthLastChild = (selector: string | number, styles: any, preSelector = ">") => css`
+  ${preSelector}:nth-last-child(${selector}) {
+    ${styles};
+  }
+`;
