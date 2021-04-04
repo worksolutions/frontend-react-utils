@@ -49,6 +49,10 @@ export const flexColumn = css`
   flex-direction: column;
 `;
 
+export const flexRow = css`
+  flex-direction: row;
+`;
+
 export const jc = memoizeWith(
   string1,
   (value: CSSProperties["justifyContent"]) => css`
