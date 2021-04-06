@@ -1,7 +1,7 @@
 {
   "name": "@worksolutions/react-utils",
   "private": false,
-  "version": "1.2.19",
+  "version": "1.2.20",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -18,9 +18,11 @@
   "license": "ISC",
   "declaration": true,
   "devDependencies": {
+    "@types/node": "^*",
+    "@types/qs": "^6.9.6",
+    "@types/react-router": "^5.1.13",
     "prettier": "^2.2.1",
-    "typescript": "^4.2.2",
-    "@types/node": "^*"
+    "typescript": "^4.2.2"
   },
   "dependencies": {
     "@types/lodash": "^4.*",
@@ -30,8 +32,10 @@
     "@types/styled-components": "^5.*",
     "@worksolutions/utils": "^1.2.5",
     "lodash": "^4.*",
+    "qs": "^6.10.1",
     "ramda": "^0.27.*",
     "react": "^17.*",
+    "react-router": "^5.2.0",
     "react-use": "^15.*",
     "styled-components": "^5.*"
   }
