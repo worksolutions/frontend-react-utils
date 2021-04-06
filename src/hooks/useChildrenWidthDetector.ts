@@ -1,21 +1,11 @@
 import React from "react";
 import { htmlCollectionToArray } from "@worksolutions/utils";
 
-const defaultTimeout = 400;
-
-export function useChildrenWidthDetector(timeout = defaultTimeout) {
-  const [ref, setRef] = React.useState<HTMLElement>();
-  const [widths, setWidth] = React.useState<number[] | null>(null);
-  React.useLayoutEffect(() => {
-    if (!ref) return;
-    setTimeout(
-      () => setWidth(htmlCollectionToArray(ref.children).map((element) => element.getBoundingClientRect().width)),
-      timeout,
-    );
-  }, [ref]);
-
-  return {
-    ref: setRef,
-    widths,
-  };
+export function useChildrenWidthDetector() {
+  const [widths, setWidths] = React.useState<number[] | null>(null);
+  const initRef = React.useCallback((element: HTMLElement | null) => {
+    if (!element) return;
+    setWidths(htmlCollectionToArray(element.children).map((element) => element.getBoundingClientRect().width));
+  }, []);
+  return { widths, initRef };
 }
