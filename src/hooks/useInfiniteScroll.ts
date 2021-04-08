@@ -48,19 +48,17 @@ export function useInfiniteScroll({
   React.useEffect(() => {
     if (!scrollableElement) return () => null;
 
-    const observer = new ResizeObserver(
-      debounce(function () {
-        if (!hasNextPageRef.current || loadingRef.current) return;
-        const scrollToBottom = getScrollToBottomSize(scrollableElement);
-        if (scrollToBottom > threshold) return;
-        onLoadMoreRef.current();
-      }, scrollCheckInterval),
-    );
+    const observer = new ResizeObserver(function () {
+      if (!hasNextPage || loading) return;
+      const scrollToBottom = getScrollToBottomSize(scrollableElement);
+      if (scrollToBottom > threshold) return;
+      onLoadMoreRef.current();
+    });
 
     observer.observe(scrollableElement);
 
     return () => observer.disconnect();
-  }, [hasNextPageRef, loadingRef, onLoadMoreRef, scrollCheckInterval, scrollableElement, threshold]);
+  }, [hasNextPage, loading, onLoadMoreRef, scrollableElement, threshold]);
 
   return setScrollableElement;
 }
