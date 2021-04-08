@@ -12,3 +12,4 @@ export * from "./useEventEmitter";
 export * from "./useSyncToRef";
 export * from "./useObservableAsState";
 export * from "./useQueryParams";
+export * from "./useInfiniteScroll";
