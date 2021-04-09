@@ -37,12 +37,8 @@ export function useDebounce(debounceTime: number, callback: (...args: any[]) => 
 
 export const useEffectSkipFirst = (callback: React.EffectCallback, dependencies?: any[]) => {
   const wasChanged = useRef(false);
-
   useEffect(function () {
-    if (wasChanged.current) {
-      callback();
-      return;
-    }
+    if (wasChanged.current) return callback();
     wasChanged.current = true;
   }, dependencies);
 };
