@@ -3,7 +3,7 @@ import { CSSProperties } from "react";
 import { isString, memoizeWithContext, string1 } from "@worksolutions/utils";
 import { memoizeWith } from "ramda";
 
-type AnimationArguments = {
+export interface AnimationConfig {
   name: Keyframes;
   duration?: CSSProperties["animationDuration"];
   timingFunction?: CSSProperties["animationTimingFunction"];
@@ -12,7 +12,7 @@ type AnimationArguments = {
   direction?: CSSProperties["animationDirection"];
   fillMode?: CSSProperties["animationFillMode"];
   playState?: CSSProperties["animationPlayState"];
-};
+}
 
 const makeAnimation = ({
   name,
@@ -23,12 +23,12 @@ const makeAnimation = ({
   direction,
   fillMode,
   playState,
-}: AnimationArguments) => {
+}: AnimationConfig) => {
   return [name, " " + [duration, timingFunction, delay, iterationCount, direction, fillMode, playState].join(" ")];
 };
 
 export const animation = memoizeWithContext(
-  function (a: AnimationArguments[]) {
+  function (a: AnimationConfig[]) {
     const result = a.map(makeAnimation);
     this.animations = result;
     return result
@@ -38,7 +38,7 @@ export const animation = memoizeWithContext(
       })
       .join("");
   },
-  function (animations: AnimationArguments[]) {
+  function (animations: AnimationConfig[]) {
     return css`
       animation: ${(this.animations as ReturnType<typeof makeAnimation>[]).map((el, index) => [
         index === 0 ? "" : ", ",
