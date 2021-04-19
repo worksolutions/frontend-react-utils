@@ -57,3 +57,17 @@ export const willChange = memoizeWith(
     will-change: ${value};
   `,
 );
+
+export const objectFit = memoizeWith(
+  string1,
+  (value: CSSProperties["objectFit"]) => css`
+    object-fit: ${value};
+  `,
+);
+
+export const objectPositions = memoizeWith(
+  string1,
+  (value: CSSProperties["objectPosition"]) => css`
+    object-position: ${value};
+  `,
+);
