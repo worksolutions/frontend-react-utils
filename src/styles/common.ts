@@ -65,7 +65,7 @@ export const objectFit = memoizeWith(
   `,
 );
 
-export const objectPositions = memoizeWith(
+export const objectPosition = memoizeWith(
   string1,
   (value: CSSProperties["objectPosition"]) => css`
     object-position: ${value};
