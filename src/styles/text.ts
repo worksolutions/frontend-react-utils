@@ -61,6 +61,13 @@ export const textTransform = memoizeWith(
   `,
 );
 
+export const textDecoration = memoizeWith(
+  string1,
+  (value: CSSProperties["textDecoration"]) => css`
+    text-decoration: ${value};
+  `,
+);
+
 export const textAlign = memoizeWith(
   string1,
   (value: CSSProperties["textAlign"]) => css`
