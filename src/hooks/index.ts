@@ -13,3 +13,4 @@ export * from "./useSyncToRef";
 export * from "./useObservableAsState";
 export * from "./useQueryParams";
 export * from "./useInfiniteScroll";
+export * from "./useCallbackMemoFabric";
