@@ -12,7 +12,7 @@ export function useCallbackMemoFabric<ARGS extends any[], RESULT>(
   callback: (...args: ARGS) => RESULT,
   deps: DependencyList = [],
 ) {
-  const memoizedCallback = React.useCallback(callback, [callback, ...deps]);
+  const memoizedCallback = React.useCallback(callback, deps);
 
   return React.useMemo(() => memoizeWith((memoizeWithParam || (() => null)) as any, memoizedCallback as any), [
     memoizeWithParam,
