@@ -12,10 +12,10 @@ export function useCallbackMemoFabric<ARGS extends any[], RESULT>(
   callback: (...args: ARGS) => RESULT,
   deps: DependencyList = [],
 ) {
-  return React.useMemo(() => memoizeWith((memoizeWithParam || (() => null)) as any, callback as any), [
+  const memoizedCallback = React.useCallback(callback, [callback, ...deps]);
+
+  return React.useMemo(() => memoizeWith((memoizeWithParam || (() => null)) as any, memoizedCallback as any), [
     memoizeWithParam,
-    callback,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ...deps,
+    memoizedCallback,
   ]);
 }
