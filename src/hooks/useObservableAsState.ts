@@ -23,7 +23,7 @@ export function useObservableAsState<T extends Record<string, any>, K extends ke
       mounted = false;
       unmount();
     };
-  }, [key, target]);
+  }, [invokeImmediately, key, target]);
 
   return value;
 }
