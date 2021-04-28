@@ -71,3 +71,10 @@ export const objectPosition = memoizeWith(
     object-position: ${value};
   `,
 );
+
+export const resize = memoizeWith(
+  string1,
+  (value: CSSProperties["resize"]) => css`
+    resize: "${value}";
+  `,
+);
