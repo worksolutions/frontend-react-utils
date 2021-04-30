@@ -32,33 +32,33 @@ export const borderColor__maker = <COLOR_NAME extends COLOR_NAME_TYPE>(getColor:
 
 export const borderBottom__maker = <COLOR_NAME extends COLOR_NAME_TYPE>(getColor: GetColorType<COLOR_NAME>) =>
   memoizeWith(
-    string2,
-    (size: number, color: IncomeColorVariant<COLOR_NAME>) => css`
-      border-bottom: ${size}px solid ${getColor(color)};
+    string3,
+    (size: number, color: IncomeColorVariant<COLOR_NAME>, mode: CSSProperties["borderStyle"] = "solid") => css`
+      border-bottom: ${size}px ${mode} ${getColor(color)};
     `,
   );
 
 export const borderLeft__maker = <COLOR_NAME extends COLOR_NAME_TYPE>(getColor: GetColorType<COLOR_NAME>) =>
   memoizeWith(
-    string2,
-    (size: number, color: IncomeColorVariant<COLOR_NAME>) => css`
-      border-left: ${size}px solid ${getColor(color)};
+    string3,
+    (size: number, color: IncomeColorVariant<COLOR_NAME>, mode: CSSProperties["borderStyle"] = "solid") => css`
+      border-left: ${size}px ${mode} ${getColor(color)};
     `,
   );
 
 export const borderTop__maker = <COLOR_NAME extends COLOR_NAME_TYPE>(getColor: GetColorType<COLOR_NAME>) =>
   memoizeWith(
-    string2,
-    (size: number, color: IncomeColorVariant<COLOR_NAME>) => css`
-      border-top: ${size}px solid ${getColor(color)};
+    string3,
+    (size: number, color: IncomeColorVariant<COLOR_NAME>, mode: CSSProperties["borderStyle"] = "solid") => css`
+      border-top: ${size}px ${mode} ${getColor(color)};
     `,
   );
 
 export const borderRight__maker = <COLOR_NAME extends COLOR_NAME_TYPE>(getColor: GetColorType<COLOR_NAME>) =>
   memoizeWith(
-    string2,
-    (size: number, color: IncomeColorVariant<COLOR_NAME>) => css`
-      border-right: ${size}px solid ${getColor(color)};
+    string3,
+    (size: number, color: IncomeColorVariant<COLOR_NAME>, mode: CSSProperties["borderStyle"] = "solid") => css`
+      border-right: ${size}px ${mode} ${getColor(color)};
     `,
   );
 
