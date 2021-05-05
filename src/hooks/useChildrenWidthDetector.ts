@@ -3,11 +3,18 @@ import { htmlCollectionToArray } from "@worksolutions/utils";
 
 export function useChildrenWidthDetector(useResizeObserver = false) {
   const [widths, setWidths] = React.useState<number[] | null>(null);
+  const elementRef = React.useRef<HTMLElement | null>(null);
+
+  const update = React.useCallback(() => {
+    if (!elementRef.current) return;
+    const childrenArray = htmlCollectionToArray(elementRef.current.children);
+    setWidths(childrenArray.map((element) => element.getBoundingClientRect().width));
+  }, []);
+
   const initRef = React.useCallback(
     (element: HTMLElement | null) => {
+      elementRef.current = element;
       if (!element) return;
-      const update = () =>
-        setWidths(htmlCollectionToArray(element.children).map((element) => element.getBoundingClientRect().width));
 
       if (useResizeObserver) {
         new ResizeObserver(update).observe(element);
@@ -18,5 +25,5 @@ export function useChildrenWidthDetector(useResizeObserver = false) {
     },
     [useResizeObserver],
   );
-  return { widths, initRef };
+  return { widths, initRef, update };
 }
