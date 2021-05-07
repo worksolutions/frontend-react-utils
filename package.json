@@ -1,7 +1,7 @@
 {
   "name": "@worksolutions/react-utils",
   "private": false,
-  "version": "1.2.41",
+  "version": "1.2.42",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
