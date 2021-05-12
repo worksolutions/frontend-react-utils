@@ -50,15 +50,13 @@ export function useInfiniteScroll({
     if (!scrollableElement) return () => null;
 
     const resizeObserver = new ResizeObserver(
-      debounce((entries: ResizeObserverEntry[]) => {
-        if (!Array.isArray(entries)) return;
-        if (entries.length === 0) return;
+      debounce(([entry]: ResizeObserverEntry[]) => {
+        if (!entry) return;
 
-        const entry = entries[0];
         const newHeight = Math.round(entry.contentRect.height);
 
         if (previousHeight.current === newHeight) return;
-        if (!hasNextPageRef.current && loadingRef.current) return;
+        if (!hasNextPageRef.current || loadingRef.current) return;
         if (scrollableElement.clientHeight !== scrollableElement.scrollHeight) return;
 
         onLoadMoreRef.current();
