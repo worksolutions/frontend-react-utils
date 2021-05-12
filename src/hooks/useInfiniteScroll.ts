@@ -1,5 +1,5 @@
 import React from "react";
-import throttle from "lodash/throttle";
+import { throttle, debounce } from "lodash";
 
 import { useSyncToRef } from "./useSyncToRef";
 
@@ -28,6 +28,7 @@ export function useInfiniteScroll({
   const loadingRef = useSyncToRef(loading);
   const hasNextPageRef = useSyncToRef(hasNextPage);
   const onLoadMoreRef = useSyncToRef(onLoadMore);
+  const previousHeight = useSyncToRef<number | null>(null);
 
   React.useEffect(() => {
     if (!scrollableElement) return () => null;
@@ -44,6 +45,31 @@ export function useInfiniteScroll({
       scrollableElement.removeEventListener("scroll", listener);
     };
   }, [hasNextPageRef, loadingRef, onLoadMoreRef, scrollCheckInterval, scrollableElement, threshold]);
+
+  React.useEffect(() => {
+    if (!scrollableElement) return () => null;
+
+    const resizeObserver = new ResizeObserver(
+      debounce(([entry]: ResizeObserverEntry[]) => {
+        if (!entry) return;
+
+        const newHeight = Math.round(entry.contentRect.height);
+
+        if (previousHeight.current === newHeight) return;
+        if (!hasNextPageRef.current || loadingRef.current) return;
+        if (scrollableElement.clientHeight !== scrollableElement.scrollHeight) return;
+
+        onLoadMoreRef.current();
+        previousHeight.current = newHeight;
+      }, scrollCheckInterval),
+    );
+
+    resizeObserver.observe(scrollableElement);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [scrollableElement, previousHeight, hasNextPageRef, loadingRef, scrollCheckInterval, onLoadMoreRef]);
 
   return setScrollableElement;
 }
