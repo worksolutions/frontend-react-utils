@@ -2,7 +2,7 @@ import React from "react";
 
 import { useEffectSkipFirst, usePrevious } from "./common";
 
-export function useStickyEffectDetector(onChangeStickyEffect: (sticky: boolean) => void) {
+function useStickyEffectDetector(onChangeStickyEffect: (sticky: boolean) => void) {
   const onChangeStickyEffectRef = React.useRef(onChangeStickyEffect);
 
   useEffectSkipFirst(() => {
@@ -11,9 +11,13 @@ export function useStickyEffectDetector(onChangeStickyEffect: (sticky: boolean) 
 
   const observer = React.useMemo(
     () =>
-      new IntersectionObserver(([e]) => onChangeStickyEffectRef.current(e.intersectionRatio < 1), {
-        threshold: [1],
-      }),
+      new IntersectionObserver(
+        ([entry]) => {
+          if (entry.boundingClientRect.width === 0 || entry.boundingClientRect.height === 0) return;
+          onChangeStickyEffectRef.current(entry.intersectionRatio < 1);
+        },
+        { threshold: [1] },
+      ),
     [],
   );
 
