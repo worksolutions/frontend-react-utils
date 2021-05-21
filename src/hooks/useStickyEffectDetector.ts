@@ -2,7 +2,7 @@ import React from "react";
 
 import { useEffectSkipFirst, usePrevious } from "./common";
 
-function useStickyEffectDetector(onChangeStickyEffect: (sticky: boolean) => void) {
+export function useStickyEffectDetector(onChangeStickyEffect: (sticky: boolean) => void) {
   const onChangeStickyEffectRef = React.useRef(onChangeStickyEffect);
 
   useEffectSkipFirst(() => {
