@@ -23,13 +23,13 @@ export function useTimer({
   const start = useCallback(
     (seconds?: number) => {
       clearInterval(timerRef.current);
+      valueRef.current = isNil(seconds) ? initialValue() : seconds;
+      forceUpdate();
+
       if (finisher(valueRef.current)) {
         if (onSuccess) onSuccess();
         return;
       }
-
-      valueRef.current = isNil(seconds) ? initialValue() : seconds;
-      forceUpdate();
 
       timerRef.current = setInterval(() => {
         valueRef.current = tickHandler(valueRef.current);
