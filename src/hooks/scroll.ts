@@ -6,7 +6,7 @@ function getWindowScrollPosition() {
   return { x: document.documentElement.scrollLeft, y: document.documentElement.scrollTop };
 }
 
-function useScrollCallback(callback: (y: number, x: number) => void, triggerOnElementChange = false) {
+export function useScrollCallback(callback: (y: number, x: number) => void, triggerOnElementChange = false) {
   const disposeRef = React.useRef<Function>();
   const runListener = React.useCallback(
     (element: HTMLElement | Window | null) => {
