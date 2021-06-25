@@ -6,32 +6,38 @@ function getWindowScrollPosition() {
   return { x: document.documentElement.scrollLeft, y: document.documentElement.scrollTop };
 }
 
-export function useScrollCallback(callback: (y: number, x: number) => void, triggerOnElementChange = false) {
+function useScrollCallback(callback: (y: number, x: number) => void, triggerOnElementChange = false) {
   const disposeRef = React.useRef<Function>();
-  const runListener = (element: HTMLElement | Window | null) => {
-    if (!element) return identity;
-    if (triggerOnElementChange) callback(0, 0);
+  const runListener = React.useCallback(
+    (element: HTMLElement | Window | null) => {
+      if (!element) return identity;
+      if (triggerOnElementChange) callback(0, 0);
 
-    const scrollHandler =
-      element === window
-        ? () => {
-            const { x, y } = getWindowScrollPosition();
-            callback(y, x);
-          }
-        : () => {
-            callback((element as HTMLElement).scrollTop, (element as HTMLElement).scrollLeft);
-          };
+      const scrollHandler =
+        element === window
+          ? () => {
+              const { x, y } = getWindowScrollPosition();
+              callback(y, x);
+            }
+          : () => {
+              callback((element as HTMLElement).scrollTop, (element as HTMLElement).scrollLeft);
+            };
 
-    element.addEventListener("scroll", scrollHandler);
-    return () => element.removeEventListener("scroll", scrollHandler);
-  };
+      element.addEventListener("scroll", scrollHandler);
+      return () => element.removeEventListener("scroll", scrollHandler);
+    },
+    [callback, triggerOnElementChange],
+  );
 
   React.useEffect(() => () => disposeRef.current && disposeRef.current(), []);
 
-  return React.useCallback((el: HTMLElement | Window | null) => {
-    if (disposeRef.current) disposeRef.current();
-    disposeRef.current = runListener(el);
-  }, []);
+  return React.useCallback(
+    (el: HTMLElement | Window | null) => {
+      if (disposeRef.current) disposeRef.current();
+      disposeRef.current = runListener(el);
+    },
+    [runListener],
+  );
 }
 
 export function useScrollOnStart() {
