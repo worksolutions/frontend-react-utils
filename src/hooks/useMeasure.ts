@@ -4,15 +4,17 @@ import { useEffectSkipFirst } from "./common";
 
 type Sizes = { width: number; height: number };
 
+function getSizeFromEntry(entry: ResizeObserverEntry) {
+  if (!entry.borderBoxSize) return entry.target.getBoundingClientRect();
+  const [size] = entry.borderBoxSize;
+  return { width: size.inlineSize, height: size.blockSize };
+}
+
 export function useMeasureCallback(callback: (sizes: Sizes, contentRect: DOMRectReadOnly) => void) {
   const [element, setElement] = React.useState<HTMLElement | null | undefined>();
 
   const observer = React.useMemo(
-    () =>
-      new ResizeObserver(([entry]) => {
-        const [size] = entry.borderBoxSize;
-        callback({ width: size.inlineSize, height: size.blockSize }, entry.contentRect);
-      }),
+    () => new ResizeObserver(([entry]) => callback(getSizeFromEntry(entry), entry.contentRect)),
     [callback],
   );
 
