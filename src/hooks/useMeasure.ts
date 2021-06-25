@@ -2,10 +2,19 @@ import React from "react";
 
 import { useEffectSkipFirst } from "./common";
 
-export function useMeasureCallback(callback: (size: DOMRectReadOnly) => void) {
-  const [element, setElement] = React.useState<HTMLElement>();
+type Sizes = { width: number; height: number };
 
-  const observer = React.useMemo(() => new ResizeObserver(([entry]) => callback(entry.contentRect)), []);
+export function useMeasureCallback(callback: (sizes: Sizes, contentRect: DOMRectReadOnly) => void) {
+  const [element, setElement] = React.useState<HTMLElement | null | undefined>();
+
+  const observer = React.useMemo(
+    () =>
+      new ResizeObserver(([entry]) => {
+        const [size] = entry.borderBoxSize;
+        callback({ width: size.inlineSize, height: size.blockSize }, entry.contentRect);
+      }),
+    [callback],
+  );
 
   useEffectSkipFirst(() => {
     if (!element) return () => null;
@@ -16,7 +25,9 @@ export function useMeasureCallback(callback: (size: DOMRectReadOnly) => void) {
   return setElement;
 }
 
-const emptyMeasure: DOMRectReadOnly = {
+const emptySizes: Sizes = { width: 0, height: 0 };
+
+const emptyContentRect: DOMRectReadOnly = {
   height: 0,
   width: 0,
   bottom: 0,
@@ -28,9 +39,14 @@ const emptyMeasure: DOMRectReadOnly = {
   toJSON: () => "empty",
 };
 
-export function useMeasure(): [(element: HTMLElement) => void, DOMRectReadOnly] {
-  const [measure, setMeasure] = React.useState<DOMRectReadOnly>(emptyMeasure);
-  const setElement = useMeasureCallback(setMeasure);
+export function useMeasure() {
+  const [measure, setMeasure] = React.useState<{ sizes: Sizes; contentRect: DOMRectReadOnly }>({
+    sizes: emptySizes,
+    contentRect: emptyContentRect,
+  });
+  const setElement = useMeasureCallback(
+    React.useCallback((sizes, contentRect) => setMeasure({ sizes, contentRect }), []),
+  );
 
-  return [setElement, measure];
+  return [setElement, measure.sizes, measure.contentRect] as const;
 }
