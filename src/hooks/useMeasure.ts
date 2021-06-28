@@ -24,7 +24,7 @@ export function useMeasureCallback(callback: (sizes: Sizes, contentRect: DOMRect
     return () => observer.unobserve(element);
   }, [element]);
 
-  return setElement;
+  return [setElement, element];
 }
 
 const emptySizes: Sizes = { width: 0, height: 0 };
@@ -46,9 +46,9 @@ export function useMeasure() {
     sizes: emptySizes,
     contentRect: emptyContentRect,
   });
-  const setElement = useMeasureCallback(
+  const [setElement, element] = useMeasureCallback(
     React.useCallback((sizes, contentRect) => setMeasure({ sizes, contentRect }), []),
   );
 
-  return [setElement, measure.sizes, measure.contentRect] as const;
+  return [setElement, measure.sizes, measure.contentRect, element] as const;
 }
