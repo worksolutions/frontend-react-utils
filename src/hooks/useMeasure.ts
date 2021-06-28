@@ -24,7 +24,7 @@ export function useMeasureCallback(callback: (sizes: Sizes, contentRect: DOMRect
     return () => observer.unobserve(element);
   }, [element]);
 
-  return [setElement, element];
+  return [setElement, element] as const;
 }
 
 const emptySizes: Sizes = { width: 0, height: 0 };
