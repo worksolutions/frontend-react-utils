@@ -2,19 +2,11 @@ import React from "react";
 
 import { useEffectSkipFirst } from "./common";
 
-type Sizes = { width: number; height: number };
-
-function getSizeFromEntry(entry: ResizeObserverEntry) {
-  if (!entry.borderBoxSize) return entry.target.getBoundingClientRect();
-  const [size] = entry.borderBoxSize;
-  return { width: size.inlineSize, height: size.blockSize };
-}
-
-export function useMeasureCallback(callback: (sizes: Sizes, contentRect: DOMRectReadOnly) => void) {
+export function useMeasureCallback(callback: (clientRect: DOMRectReadOnly, contentRect: DOMRectReadOnly) => void) {
   const [element, setElement] = React.useState<HTMLElement | null | undefined>();
 
   const observer = React.useMemo(
-    () => new ResizeObserver(([entry]) => callback(getSizeFromEntry(entry), entry.contentRect)),
+    () => new ResizeObserver(([entry]) => callback(entry.target.getBoundingClientRect(), entry.contentRect)),
     [callback],
   );
 
@@ -27,9 +19,7 @@ export function useMeasureCallback(callback: (sizes: Sizes, contentRect: DOMRect
   return [setElement, element] as const;
 }
 
-const emptySizes: Sizes = { width: 0, height: 0 };
-
-const emptyContentRect: DOMRectReadOnly = {
+const emptyClientRect: DOMRectReadOnly = {
   height: 0,
   width: 0,
   bottom: 0,
@@ -42,13 +32,13 @@ const emptyContentRect: DOMRectReadOnly = {
 };
 
 export function useMeasure() {
-  const [measure, setMeasure] = React.useState<{ sizes: Sizes; contentRect: DOMRectReadOnly }>({
-    sizes: emptySizes,
-    contentRect: emptyContentRect,
+  const [measure, setMeasure] = React.useState<{ clientRect: DOMRectReadOnly; contentRect: DOMRectReadOnly }>({
+    clientRect: emptyClientRect,
+    contentRect: emptyClientRect,
   });
   const [setElement, element] = useMeasureCallback(
-    React.useCallback((sizes, contentRect) => setMeasure({ sizes, contentRect }), []),
+    React.useCallback((clientRect, contentRect) => setMeasure({ clientRect, contentRect }), []),
   );
 
-  return [setElement, measure.sizes, measure.contentRect, element] as const;
+  return [setElement, measure.clientRect, measure.contentRect, element] as const;
 }
