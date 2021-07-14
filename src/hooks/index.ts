@@ -15,3 +15,4 @@ export * from "./useQueryParams";
 export * from "./useInfiniteScroll";
 export * from "./useCallbackMemoFabric";
 export * from "./useProvideRef";
+export * from "./useStackState";
