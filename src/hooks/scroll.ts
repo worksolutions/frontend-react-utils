@@ -84,3 +84,63 @@ export function useScrollToElement(center: boolean, behavior?: ScrollBehavior, p
     },
   };
 }
+
+
+export interface ScrollInfo {
+  inStartPos: boolean;
+  inEndPos: boolean;
+  value: number;
+}
+function getScrollInfo(target: HTMLElement | Window): ScrollInfo {
+  let inEndPos = false;
+  let inStartPos = false;
+  let scrollValue = 0;
+  let elHeight = 0;
+  let scrollHeight = 0;
+
+  if (target) {
+    if ("pageYOffset" in target) {
+      scrollValue = target.pageYOffset;
+      elHeight = target.outerHeight;
+      scrollHeight = target.outerHeight;
+    } else {
+      scrollValue = target.scrollTop;
+      elHeight = target.clientHeight;
+      scrollHeight = target.scrollHeight;
+    }
+    inEndPos = elHeight + scrollValue === scrollHeight;
+    inStartPos = scrollValue === 0;
+  }
+
+  return {
+    inStartPos,
+    inEndPos,
+    value: scrollValue,
+  };
+}
+
+export function useVerticalScrollInfo(callback: (args: ScrollInfo) => void, triggerOnElementChange = false) {
+  const disposeRef = React.useRef<Function>();
+  const runListener = React.useCallback(
+    (element: HTMLElement | Window | null) => {
+      if (!element) return identity;
+      if (triggerOnElementChange) callback(getScrollInfo(element));
+
+      const scrollHandler = () => callback(getScrollInfo(element));
+
+      element.addEventListener("scroll", scrollHandler);
+      return () => element.removeEventListener("scroll", scrollHandler);
+    },
+    [callback, triggerOnElementChange],
+  );
+
+  React.useEffect(() => () => disposeRef.current && disposeRef.current(), []);
+
+  return React.useCallback(
+    (el: HTMLElement | Window | null) => {
+      if (disposeRef.current) disposeRef.current();
+      disposeRef.current = runListener(el);
+    },
+    [runListener],
+  );
+}
