@@ -12,24 +12,11 @@
   "scripts": {
     "format": "prettier --write --list-different \"src/**/*.{ts,tsx,js,json,yml}\"",
     "build": "rm -rf dist && NODE_ENV=production node_modules/typescript/bin/tsc",
-    "prepublish": "npm run build"
-  },
-  "author": "Anatoly Grabarov",
-  "license": "ISC",
-  "declaration": true,
-  "devDependencies": {
-    "@types/node": "^*",
-    "@types/qs": "^6.9.6",
-    "@types/react-router": "^5.1.13",
-    "prettier": "^2.2.1",
-    "typescript": "^4.2.2"
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
-    "@types/lodash": "^4.*",
-    "@types/ramda": "^0.27.*",
-    "@types/react": "^16.*",
-    "@types/resize-observer-browser": "*",
-    "@types/styled-components": "^5.*",
+    "react-dom": "^17.0.2",
     "@worksolutions/utils": "^1.2.5",
     "lodash": "^4.*",
     "qs": "^6.10.1",
@@ -38,5 +25,23 @@
     "react-router": "^5.2.0",
     "react-use": "^17.2.4",
     "styled-components": "^5.*"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.6",
+    "@storybook/addon-actions": "^6.3.4",
+    "@storybook/addon-essentials": "^6.3.4",
+    "@storybook/addon-links": "^6.3.4",
+    "@storybook/react": "^6.3.4",
+    "@types/lodash": "^4.*",
+    "@types/node": "^*",
+    "@types/qs": "^6.9.6",
+    "@types/ramda": "^0.27.*",
+    "@types/react": "^16.*",
+    "@types/react-router": "^5.1.13",
+    "@types/resize-observer-browser": "*",
+    "@types/styled-components": "^5.*",
+    "babel-loader": "^8.2.2",
+    "prettier": "^2.2.1",
+    "typescript": "^4.2.2"
   }
 }

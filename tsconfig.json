@@ -26,7 +26,8 @@
     "experimentalDecorators": true,
     "declaration": true,
     "outDir": "dist",
-    "noEmitOnError": true
+    "noEmitOnError": true,
+    "jsx": "react"
   },
   "include": ["src"],
   "exclude": [
