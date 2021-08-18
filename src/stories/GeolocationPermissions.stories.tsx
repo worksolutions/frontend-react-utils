@@ -36,7 +36,7 @@ export default {
   component: Demo,
   argTypes: {
     ones: {
-      name: "Сработает один раз при маунте компонента",
+      name: "Изменение разрешения геолокации произойдет один раз при маунте компонента",
     },
   },
 } as ComponentMeta<typeof Demo>;
