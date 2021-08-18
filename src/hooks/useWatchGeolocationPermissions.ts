@@ -1,9 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 export type HookWatchGeolocationPermissionsParams = { ones?: boolean };
-export type HookWatchGeolocationPermissionsReturnType = PermissionsState & {
-  receivedState: boolean;
-};
+export type HookWatchGeolocationPermissionsReturnType = PermissionsState;
 
 type PermissionsState = {
   granted: null | boolean;
@@ -11,9 +9,7 @@ type PermissionsState = {
   prompt: null | boolean;
 };
 
-function useWatchGeolocationPermissions({
-  ones,
-}: HookWatchGeolocationPermissionsParams = {}): HookWatchGeolocationPermissionsReturnType {
+export function useWatchGeolocationPermissions({ ones }: HookWatchGeolocationPermissionsParams = {}): PermissionsState {
   const permissionStatusRef = useRef<PermissionStatus>();
   const [permissions, setPermissions] = useState<PermissionsState>({
     granted: null,
@@ -46,10 +42,5 @@ function useWatchGeolocationPermissions({
     };
   }, []);
 
-  const isReceivedState = () =>
-    permissions.denied !== null && permissions.granted !== null && permissions.prompt !== null;
-
-  return { ...permissions, receivedState: isReceivedState() };
+  return permissions;
 }
-
-export default useWatchGeolocationPermissions;
