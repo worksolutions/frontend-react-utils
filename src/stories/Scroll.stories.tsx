@@ -31,7 +31,7 @@ const Demo = () => {
 };
 
 export default {
-  title: "Hooks",
+  title: "Hooks/useVerticalScroll",
   component: Demo,
 } as ComponentMeta<typeof Demo>;
 
