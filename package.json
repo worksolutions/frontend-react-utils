@@ -10,19 +10,18 @@
     "url": "https://github.com/worksolutions/frontend-react-utils"
   },
   "scripts": {
-    "test": "jest --maxWorkers 2",
     "format": "prettier --write --list-different \"src/**/*.{ts,tsx,js,json,yml}\"",
     "build": "rm -rf dist && NODE_ENV=production node_modules/typescript/bin/tsc",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook -o docs-build"
   },
   "dependencies": {
+    "react-dom": "^17.0.2",
     "@worksolutions/utils": "^1.2.5",
     "lodash": "^4.*",
     "qs": "^6.10.1",
     "ramda": "^0.27.*",
     "react": "^17.*",
-    "react-dom": "^17.0.2",
     "react-router": "^5.2.0",
     "react-use": "^17.2.4",
     "styled-components": "^5.*"
@@ -30,12 +29,14 @@
   "devDependencies": {
     "@babel/core": "^7.14.6",
     "@storybook/addon-actions": "^6.3.4",
+    "@storybook/addon-controls": "^6.3.7",
     "@storybook/addon-essentials": "^6.3.4",
     "@storybook/addon-links": "^6.3.4",
     "@storybook/react": "^6.3.4",
     "@testing-library/react": "^12.0.0",
     "@testing-library/react-hooks": "^7.0.1",
     "@types/jest": "^27.0.1",
+    "@storybook/theming": "^6.3.7",
     "@types/lodash": "^4.*",
     "@types/node": "^*",
     "@types/qs": "^6.9.6",
