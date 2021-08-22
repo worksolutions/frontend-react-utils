@@ -10,18 +10,19 @@
     "url": "https://github.com/worksolutions/frontend-react-utils"
   },
   "scripts": {
+    "test": "jest --maxWorkers 2",
     "format": "prettier --write --list-different \"src/**/*.{ts,tsx,js,json,yml}\"",
     "build": "rm -rf dist && NODE_ENV=production node_modules/typescript/bin/tsc",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook -o docs-build"
   },
   "dependencies": {
-    "react-dom": "^17.0.2",
     "@worksolutions/utils": "^1.2.5",
     "lodash": "^4.*",
     "qs": "^6.10.1",
     "ramda": "^0.27.*",
     "react": "^17.*",
+    "react-dom": "^17.0.2",
     "react-router": "^5.2.0",
     "react-use": "^17.2.4",
     "styled-components": "^5.*"
@@ -32,6 +33,9 @@
     "@storybook/addon-essentials": "^6.3.4",
     "@storybook/addon-links": "^6.3.4",
     "@storybook/react": "^6.3.4",
+    "@testing-library/react": "^12.0.0",
+    "@testing-library/react-hooks": "^7.0.1",
+    "@types/jest": "^27.0.1",
     "@types/lodash": "^4.*",
     "@types/node": "^*",
     "@types/qs": "^6.9.6",
@@ -41,7 +45,10 @@
     "@types/resize-observer-browser": "*",
     "@types/styled-components": "^5.*",
     "babel-loader": "^8.2.2",
+    "jest": "^27.0.6",
+    "jest-esm-transformer": "^1.0.0",
     "prettier": "^2.2.1",
+    "ts-jest": "^27.0.5",
     "typescript": "^4.2.2"
   }
 }
