@@ -9,7 +9,9 @@ type PermissionsState = {
   prompt: null | boolean;
 };
 
-export function useWatchGeolocationPermissions({ ones }: HookWatchGeolocationPermissionsParams = {}): PermissionsState {
+export function useWatchGeolocationPermissions({
+  ones,
+}: HookWatchGeolocationPermissionsParams = {}): PermissionsState & { receivedState: boolean } {
   const permissionStatusRef = useRef<PermissionStatus>();
   const [permissions, setPermissions] = useState<PermissionsState>({
     granted: null,
@@ -42,5 +44,8 @@ export function useWatchGeolocationPermissions({ ones }: HookWatchGeolocationPer
     };
   }, []);
 
-  return permissions;
+  const isReceivedState = () =>
+    permissions.denied !== null && permissions.granted !== null && permissions.prompt !== null;
+
+  return { ...permissions, receivedState: isReceivedState() };
 }
