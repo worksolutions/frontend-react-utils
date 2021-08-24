@@ -17,4 +17,3 @@ export * from "./useCallbackMemoFabric";
 export * from "./useProvideRef";
 export * from "./useStackState";
 export * from "./useWatchGeolocationPermissions";
-export * from "./useWatchGeolocationPermissions";

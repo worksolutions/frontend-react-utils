@@ -2,11 +2,12 @@ export type OnchangePermission = ((this: { state: PermissionState }) => void) | 
 
 export class PermissionMocker {
   private onchange: OnchangePermission;
-  private granted = this.mockPermission("granted", this.setOnChange.bind(this));
-  private denied = this.mockPermission("denied", this.setOnChange.bind(this));
-  private prompt = this.mockPermission("prompt", this.setOnChange.bind(this));
+  private granted = this.mockPermission("granted");
+  private denied = this.mockPermission("denied");
+  private prompt = this.mockPermission("prompt");
 
   constructor() {
+    this.setOnChange = this.setOnChange.bind(this);
     this.writeNavigator = this.writeNavigator.bind(this);
     this.mockPermission = this.mockPermission.bind(this);
     this.fireOnchangePermission = this.fireOnchangePermission.bind(this);
@@ -26,9 +27,11 @@ export class PermissionMocker {
     this.onchange.call({ state: permissionValue });
   }
 
-  private mockPermission(state: PermissionState, setOnChange: (onchange: OnchangePermission) => void) {
+  private mockPermission(state: PermissionState) {
     const query = { state };
     let onchangeValue: OnchangePermission = undefined;
+    const setOnChange = this.setOnChange.bind(this);
+
     Object.defineProperty(query, "onchange", {
       set(value: OnchangePermission) {
         onchangeValue = value;
