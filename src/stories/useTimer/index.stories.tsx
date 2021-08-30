@@ -15,7 +15,7 @@ export type HookTimerInfoProps = {
 const Demo = ({ addedValue, initialValue, interval, finishValue }: HookTimerInfoProps) => {
   const { value, start, stop } = useTimer({
     interval: interval,
-    finisher: (value) => value > finishValue,
+    finisher: (value) => value >= finishValue,
     initialValue: () => initialValue,
     onSuccess: () => {},
     tickHandler: (value) => value + addedValue,

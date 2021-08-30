@@ -18,7 +18,7 @@ export function useTimer({
 }) {
   const forceUpdate = useForceUpdate();
   const timerRef = useRef<NodeJS.Timer>(null!);
-  const valueRef = useRef(0);
+  const valueRef = useRef(initialValue() || 0);
 
   const start = useCallback(
     (seconds?: number) => {
