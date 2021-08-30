@@ -17,7 +17,7 @@ export function useTimer({
   onSuccess?: () => void;
 }) {
   const forceUpdate = useForceUpdate();
-  const timerRef = useRef<NodeJS.Timeout>(null!);
+  const timerRef = useRef<NodeJS.Timer>(null!);
   const valueRef = useRef(0);
 
   const start = useCallback(
@@ -38,7 +38,7 @@ export function useTimer({
           clearInterval(timerRef.current);
           if (onSuccess) onSuccess();
         }
-      }, interval) as any;
+      }, interval);
     },
     [finisher, forceUpdate, tickHandler, initialValue, interval, onSuccess],
   );
@@ -51,7 +51,7 @@ export function useTimer({
   useEffect(() => {
     valueRef.current = initialValue();
     return () => clearInterval(timerRef.current);
-  }, [initialValue]);
+  }, []);
 
   return {
     value: valueRef.current,
