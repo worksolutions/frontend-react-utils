@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import { useTimer } from "../../hooks";
@@ -21,9 +21,13 @@ const Demo = ({ addedValue, initialValue, interval, finishValue }: HookTimerInfo
     tickHandler: (value) => value + addedValue,
   });
 
-  useEffect(() => start(), []);
-
-  return <div>{value}</div>;
+  return (
+    <div>
+      <div>Count: {value}</div>
+      <button onClick={() => start()}>start</button>
+      <button onClick={stop}>stop</button>
+    </div>
+  );
 };
 
 export default {
