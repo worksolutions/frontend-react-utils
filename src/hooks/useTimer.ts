@@ -11,10 +11,10 @@ export function useTimer({
   onSuccess,
 }: {
   interval: number;
-  initialValue: () => number;
-  tickHandler: (value: number) => number;
-  finisher: (value: number) => boolean;
   onSuccess?: () => void;
+  initialValue: () => number;
+  finisher?: (value: number) => boolean;
+  tickHandler: (value: number) => number;
 }) {
   const forceUpdate = useForceUpdate();
   const timerRef = useRef<NodeJS.Timer>(null!);
@@ -26,7 +26,7 @@ export function useTimer({
       valueRef.current = isNil(seconds) ? initialValue() : seconds;
       forceUpdate();
 
-      if (finisher(valueRef.current)) {
+      if (finisher && finisher(valueRef.current)) {
         if (onSuccess) onSuccess();
         return;
       }
@@ -34,7 +34,7 @@ export function useTimer({
       timerRef.current = setInterval(() => {
         valueRef.current = tickHandler(valueRef.current);
         forceUpdate();
-        if (finisher(valueRef.current)) {
+        if (finisher && finisher(valueRef.current)) {
           clearInterval(timerRef.current);
           if (onSuccess) onSuccess();
         }

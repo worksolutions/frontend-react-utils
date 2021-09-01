@@ -10,7 +10,7 @@
     "url": "https://github.com/worksolutions/frontend-react-utils"
   },
   "scripts": {
-    "test": "jest",
+    "test": "jest --maxWorkers 2",
     "format": "prettier --write --list-different \"src/**/*.{ts,tsx,js,json,yml}\"",
     "build": "rm -rf dist && NODE_ENV=production node_modules/typescript/bin/tsc",
     "storybook": "start-storybook -p 6006",
