@@ -17,7 +17,7 @@ export function useTimer({
   onSuccess?: () => void;
 }) {
   const forceUpdate = useForceUpdate();
-  const timerRef = useRef<NodeJS.Timer>(null!);
+  const timerRef = useRef<number>(null!);
   const valueRef = useRef(initialValue() || 0);
 
   const start = useCallback(

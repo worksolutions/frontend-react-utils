@@ -13,7 +13,7 @@ export * from "./useSyncToRef";
 export * from "./useObservableAsState";
 export * from "./useQueryParams";
 export * from "./useInfiniteScroll";
-export * from "./useCallbackMemoFabric";
+export * from "./useMemoizeCallback";
 export * from "./useProvideRef";
 export * from "./useStackState";
 export * from "./useWatchGeolocationPermissions";
