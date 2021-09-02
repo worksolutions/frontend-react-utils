@@ -1,10 +1,11 @@
 {
   "name": "@worksolutions/react-utils",
   "private": false,
-  "version": "1.2.57",
+  "version": "1.2.58",
   "description": "",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "types": "dist/esm/index.d.ts",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/worksolutions/frontend-react-utils"
@@ -12,7 +13,7 @@
   "scripts": {
     "test": "jest",
     "format": "prettier --write --list-different \"src/**/*.{ts,tsx,js,json,yml}\"",
-    "build": "rm -rf dist && NODE_ENV=production node_modules/typescript/bin/tsc",
+    "build": "rm -rf dist && NODE_ENV=production && tsc --module ESNext --outDir dist/esm && tsc --module commonjs --outDir dist/cjs",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook -o docs"
   },
