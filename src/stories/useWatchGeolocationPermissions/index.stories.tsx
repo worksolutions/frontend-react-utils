@@ -1,16 +1,32 @@
 import React, { useEffect, useState } from "react";
-import { useWatchGeolocationPermissions } from "../hooks/useWatchGeolocationPermissions";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
+
+import { useWatchGeolocationPermissions } from "../../hooks";
+import ForceUnmountingComponent from "../../utils/storyHelpers/ForceUnmountingComponent";
 
 export type HookWatchGeolocationPermissionsInfoProps = {
   ones: boolean;
 };
 
 const Demo = ({ ones }: HookWatchGeolocationPermissionsInfoProps) => {
-  const { denied, granted, prompt } = useWatchGeolocationPermissions({ ones });
-  const [state, setState] = useState<GeolocationPosition | GeolocationPositionError>();
+  const { denied, granted, prompt, receivedState } = useWatchGeolocationPermissions({ ones });
+  const [state, setState] = useState<GeolocationPosition | null>(null);
+  const [error, setError] = useState<GeolocationPositionError | null>(null);
 
-  useEffect(() => navigator.geolocation.getCurrentPosition(setState, setState), [denied, granted, granted]);
+  useEffect(
+    () =>
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setState(position);
+          setError(null);
+        },
+        (error) => {
+          setError(error);
+          setState(null);
+        },
+      ),
+    [denied, granted, prompt, receivedState],
+  );
 
   return (
     <div>
@@ -19,12 +35,12 @@ const Demo = ({ ones }: HookWatchGeolocationPermissionsInfoProps) => {
       {prompt && "Ожидание пользователя"}
       {!prompt && (
         <div>
-          {state instanceof GeolocationPosition && (
+          {state && (
             <span>
               latitude: {state?.coords.latitude} longitude:{state?.coords.longitude}
             </span>
           )}
-          {state instanceof GeolocationPositionError && <span>{state?.message}</span>}
+          {error && <span>{error?.message}</span>}
         </div>
       )}
     </div>
@@ -43,10 +59,9 @@ export default {
 
 const Template: ComponentStory<typeof Demo> = (props) => {
   return (
-    <div>
-      {props.ones ? <Demo {...props} /> : ""}
-      {!props.ones ? <Demo {...props} /> : ""}
-    </div>
+    <ForceUnmountingComponent>
+      <Demo {...props} />
+    </ForceUnmountingComponent>
   );
 };
 
