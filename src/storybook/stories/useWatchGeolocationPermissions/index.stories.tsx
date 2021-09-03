@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import { useWatchGeolocationPermissions } from "../../hooks";
-import ForceUnmountingComponent from "../../utils/storyHelpers/ForceUnmountingComponent";
+import { useWatchGeolocationPermissions } from "../../../hooks";
+import ForceUnmountingComponent from "../../../utils/storyHelpers/ForceUnmountingComponent";
 
 export type HookWatchGeolocationPermissionsInfoProps = {
   ones: boolean;

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { times } from "ramda";
-import { useVerticalScrollInfo } from "../../hooks";
+import { useVerticalScrollInfo } from "../../../hooks";
 
 const Demo = () => {
   const [result, setResult] = useState({});

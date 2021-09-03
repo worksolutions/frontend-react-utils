@@ -1,9 +1,9 @@
 import React from "react";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import { useTimer } from "../../hooks";
-import { rangeControl } from "../../utils/storyHelpers/controls";
-import ForceUnmountingComponent from "../../utils/storyHelpers/ForceUnmountingComponent";
+import { useTimer } from "../../../hooks";
+import { rangeControl } from "../../../utils/storyHelpers/controls";
+import ForceUnmountingComponent from "../../../utils/storyHelpers/ForceUnmountingComponent";
 
 export type HookTimerInfoProps = {
   interval: number;
