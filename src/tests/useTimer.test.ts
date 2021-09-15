@@ -3,8 +3,6 @@ import { renderHook } from "@testing-library/react-hooks";
 
 import { useTimer } from "../hooks";
 
-jest.useFakeTimers();
-
 const initialValue = 0;
 
 const increment = (value: number) => value + 1;
@@ -30,64 +28,71 @@ const startUp = (params: setupHook = {} as any) =>
     }),
   );
 
-it("useTimer should start with initialValue", () => {
-  const { result } = startUp();
-  expect(result.current.value).toBe(initialValue);
-});
+describe("useTimer", () => {
+  beforeAll(() => jest.useFakeTimers());
+  beforeEach(() => jest.runAllTimers());
+  afterAll(() => jest.useRealTimers());
 
-it("useTimer should be started", () => {
-  const { result } = startUp();
+  it("useTimer should start with initialValue", () => {
+    const { result } = startUp();
+    expect(result.current.value).toBe(initialValue);
+  });
 
-  act(() => result.current.start());
-  wait(500);
-  expect(result.current.value).toBe(initialValue + 5);
-  act(() => result.current.stop());
-});
+  it("useTimer should be started", () => {
+    const { result, waitFor } = startUp();
 
-it("useTimer should be stopped", () => {
-  const { result } = startUp();
+    act(() => result.current.start());
+    wait(500);
+    waitFor(() => expect(result.current.value).toBe(initialValue + 5));
+    act(() => result.current.stop());
+  });
 
-  act(() => result.current.start());
-  wait(500);
-  act(() => result.current.stop());
-  wait(300);
-  expect(result.current.value).toBe(initialValue + 5);
-  expect(result.current.value).not.toBe(initialValue + 8);
-});
+  it("useTimer should be stopped", () => {
+    const { result, waitFor } = startUp();
 
-it("useTimer should change value at startup", () => {
-  const { result } = startUp();
+    act(() => result.current.start());
+    wait(500);
+    act(() => result.current.stop());
+    wait(300);
 
-  act(() => result.current.start());
-  wait(100);
-  expect(result.current.value).toBe(initialValue + 1);
-  act(() => result.current.stop());
-});
+    waitFor(() => expect(result.current.value).toBe(initialValue + 5));
+    waitFor(() => expect(result.current.value).not.toBe(initialValue + 8));
+  });
 
-it("tickHandler should add to value 10", () => {
-  const { result } = startUp({ tickHandler: (value) => value + 10 });
+  it("useTimer should change value at startup", () => {
+    const { result, waitFor } = startUp();
 
-  act(() => result.current.start());
-  wait(200);
-  expect(result.current.value).toBe(initialValue + 20);
-  act(() => result.current.stop());
-});
+    act(() => result.current.start());
+    wait(100);
+    waitFor(() => expect(result.current.value).toBe(initialValue + 1));
+    act(() => result.current.stop());
+  });
 
-it("onSuccess should be called", () => {
-  const mockFn = jest.fn();
-  const { result } = startUp({ onSuccess: mockFn });
+  it("tickHandler should add to value 10", () => {
+    const { result, waitFor } = startUp({ tickHandler: (value) => value + 10 });
 
-  act(() => result.current.start());
-  wait(200);
-  act(() => result.current.stop());
+    act(() => result.current.start());
+    wait(200);
+    waitFor(() => expect(result.current.value).toBe(initialValue + 20));
+    act(() => result.current.stop());
+  });
 
-  expect(mockFn).toHaveBeenCalled();
-});
+  it("onSuccess should be called", () => {
+    const mockFn = jest.fn();
+    const { result, waitFor } = startUp({ onSuccess: mockFn });
 
-it("finisher should stop counter", () => {
-  const { result } = startUp({ finisher: (value) => value === 3 });
+    act(() => result.current.start());
+    wait(200);
+    act(() => result.current.stop());
 
-  act(() => result.current.start());
-  wait(400);
-  expect(result.current.value).toBe(initialValue + 3);
+    waitFor(() => expect(mockFn).toHaveBeenCalled());
+  });
+
+  it("finisher should stop counter", () => {
+    const { result, waitFor } = startUp({ finisher: (value) => value === 3 });
+
+    act(() => result.current.start());
+    wait(500);
+    waitFor(() => expect(result.current.value).toBe(initialValue + 3));
+  });
 });

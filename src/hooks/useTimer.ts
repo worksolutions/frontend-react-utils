@@ -1,7 +1,26 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 import { isNil } from "ramda";
 
-import { useForceUpdate } from "./common";
+import { useEffectSkipFirst, useForceUpdate } from "./common";
+
+enum TimerStatus {
+  Stopped = "Stopped",
+  Running = "Running",
+}
+
+enum ReducerType {
+  ChangeValue = "ChangeValue",
+}
+
+type timerState = { status: TimerStatus; value: number };
+type Action = { type: TimerStatus | ReducerType; payload?: { status?: TimerStatus; value?: number } };
+
+const reducer = (state: timerState, action: Action) => {
+  if (action.type === TimerStatus.Running) return { ...state, ...action.payload };
+  if (action.type === TimerStatus.Stopped) return { ...state, ...action.payload };
+  if (action.type === ReducerType.ChangeValue) return { ...state, ...action.payload };
+  return { status: TimerStatus.Stopped, value: 0 };
+};
 
 export function useTimer({
   finisher,
@@ -16,46 +35,41 @@ export function useTimer({
   finisher?: (value: number) => boolean;
   tickHandler: (value: number) => number;
 }) {
-  const forceUpdate = useForceUpdate();
-  const timerRef = useRef<number>(null!);
-  const valueRef = useRef(initialValue() || 0);
+  const timerRef = useRef<NodeJS.Timer>(null!);
+  const [{ value, status }, dispatch] = useReducer(reducer, {
+    status: TimerStatus.Stopped,
+    value: initialValue() || 0,
+  });
 
   const start = useCallback(
-    (seconds?: number) => {
-      clearInterval(timerRef.current);
-      valueRef.current = isNil(seconds) ? initialValue() : seconds;
-      forceUpdate();
-
-      if (finisher && finisher(valueRef.current)) {
-        if (onSuccess) onSuccess();
-        return;
-      }
-
-      timerRef.current = setInterval(() => {
-        valueRef.current = tickHandler(valueRef.current);
-        forceUpdate();
-        if (finisher && finisher(valueRef.current)) {
-          clearInterval(timerRef.current);
-          if (onSuccess) onSuccess();
-        }
-      }, interval);
-    },
-    [finisher, forceUpdate, tickHandler, initialValue, interval, onSuccess],
+    () => dispatch({ type: TimerStatus.Running, payload: { value: initialValue(), status: TimerStatus.Running } }),
+    [],
   );
-
   const stop = useCallback(() => {
+    dispatch({ type: TimerStatus.Stopped, payload: { status: TimerStatus.Stopped } });
     if (onSuccess) onSuccess();
-    clearInterval(timerRef.current);
   }, [onSuccess]);
 
-  useEffect(() => {
-    valueRef.current = initialValue();
-    return () => clearInterval(timerRef.current);
-  }, []);
+  const changeValue = useCallback(
+    (value) => dispatch({ type: ReducerType.ChangeValue, payload: { value: tickHandler(value) } }),
+    [tickHandler],
+  );
 
-  return {
-    value: valueRef.current,
-    start,
-    stop,
-  };
+  useEffect(() => {
+    if (status !== TimerStatus.Stopped) {
+      if (finisher && finisher(value)) stop();
+    }
+  }, [finisher, onSuccess, value, status]);
+
+  useEffect(() => {
+    if (status === TimerStatus.Running) {
+      timerRef.current = setInterval(() => changeValue(value), interval);
+    }
+
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [status, value, tickHandler, timerRef.current]);
+
+  return { value, start, stop };
 }
