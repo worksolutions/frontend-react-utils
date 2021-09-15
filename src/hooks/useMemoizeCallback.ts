@@ -7,7 +7,7 @@ import { memoizeWith } from "ramda";
  * @param callback - useCallback hook callback
  * @param deps - useCallback hook dependencies
  */
-export function useCallbackMemoFabric<ARGS extends any[], RESULT>(
+export function useMemoizeCallback<ARGS extends any[], RESULT>(
   memoizeWithParam: null | ((...args: ARGS) => any),
   callback: (...args: ARGS) => RESULT,
   deps: DependencyList = [],

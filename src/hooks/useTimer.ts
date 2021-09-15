@@ -17,8 +17,8 @@ export function useTimer({
   tickHandler: (value: number) => number;
 }) {
   const forceUpdate = useForceUpdate();
-  const timerRef = useRef<NodeJS.Timeout>(null!);
-  const valueRef = useRef(0);
+  const timerRef = useRef<number>(null!);
+  const valueRef = useRef(initialValue() || 0);
 
   const start = useCallback(
     (seconds?: number) => {
@@ -38,7 +38,7 @@ export function useTimer({
           clearInterval(timerRef.current);
           if (onSuccess) onSuccess();
         }
-      }, interval) as any;
+      }, interval);
     },
     [finisher, forceUpdate, tickHandler, initialValue, interval, onSuccess],
   );
@@ -51,7 +51,7 @@ export function useTimer({
   useEffect(() => {
     valueRef.current = initialValue();
     return () => clearInterval(timerRef.current);
-  }, [initialValue]);
+  }, []);
 
   return {
     value: valueRef.current,
