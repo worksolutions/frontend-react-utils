@@ -3,7 +3,7 @@ export * from "./libs/provideRef";
 export * from "./common";
 export * from "./scroll";
 export * from "./special";
-export * from "./useChildrenWidthDetector";
+export * from "./useChildrenMeasure";
 export * from "./useDebouncedInput";
 export * from "./useMeasure";
 export * from "./useTimer";
