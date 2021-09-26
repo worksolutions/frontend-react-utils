@@ -33,6 +33,18 @@ const Demo = () => {
 export default {
   title: "Hooks/useVerticalScroll",
   component: Demo,
+  parameters: {
+    componentSource: {
+      code: `
+      useVerticalScrollInfo(callback: (args: {
+        inStartPos: boolean;
+        inEndPos: boolean;
+        value: number;
+      }) => void,
+      triggerOnElementChange = false): (el: (HTMLElement | Window | null)) => void`,
+      language: "typescript",
+    },
+  },
 } as ComponentMeta<typeof Demo>;
 
 const Template: ComponentStory<typeof Demo> = () => <Demo />;
