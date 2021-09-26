@@ -45,6 +45,17 @@ export default {
       ...booleanControl(),
     },
   },
+  parameters: {
+    componentSource: {
+      code: `
+      useChildrenWidthDetector(useResizeObserver?: boolean): { 
+        widths: number[] | null,
+        initRef: (element: (HTMLElement | null)) => void,
+        update: () => void
+      }`,
+      language: "typescript",
+    },
+  },
 } as ComponentMeta<typeof Demo>;
 
 export const useChildrenWidthDetectorInfo = Template.bind({});
