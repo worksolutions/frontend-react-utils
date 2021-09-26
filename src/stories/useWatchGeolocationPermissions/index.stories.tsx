@@ -55,6 +55,19 @@ export default {
       name: "Изменение разрешения геолокации произойдет один раз при маунте компонента",
     },
   },
+  parameters: {
+    componentSource: {
+      code: `
+      useWatchGeolocationPermissions({ ones }?: { ones?: boolean }):  {
+        granted: null | boolean; 
+        denied: null | boolean;
+        prompt: null | boolean;
+        receivedState: null | boolean 
+      }
+      `,
+      language: "typescript",
+    },
+  },
 } as ComponentMeta<typeof Demo>;
 
 const Template: ComponentStory<typeof Demo> = (props) => {
