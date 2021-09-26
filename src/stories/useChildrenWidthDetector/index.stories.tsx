@@ -11,7 +11,6 @@ const defaultElements = () => new Array(5).fill(null);
 
 const Demo = (props: { useResizeObserver: boolean }) => {
   const { update, initRef, widths } = useChildrenWidthDetector(props.useResizeObserver);
-  console.log(widths);
 
   return (
     <div>
