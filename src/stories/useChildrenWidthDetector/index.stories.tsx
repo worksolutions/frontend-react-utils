@@ -5,12 +5,12 @@ import ForceUnmountingComponent from "../../utils/storyHelpers/ForceUnmountingCo
 import DebugComponent from "../../utils/storyHelpers/DebugComponent";
 import { booleanControl } from "../../utils/storyHelpers/controls";
 
-import { useChildrenWidthDetector } from "../../hooks";
+import { useChildrenMeasure } from "../../hooks";
 
 const defaultElements = () => new Array(5).fill(null);
 
 const Demo = (props: { useResizeObserver: boolean }) => {
-  const { update, initRef, widths } = useChildrenWidthDetector(props.useResizeObserver);
+  const { update, initRef, measures } = useChildrenMeasure(props.useResizeObserver);
 
   return (
     <div>
@@ -19,7 +19,7 @@ const Demo = (props: { useResizeObserver: boolean }) => {
           <div>item {index}</div>
         ))}
       </div>
-      <DebugComponent data={widths} />
+      <DebugComponent data={measures} />
       <div onClick={update} style={{ marginTop: 20, cursor: "pointer", fontWeight: 700 }}>
         Update widths
       </div>

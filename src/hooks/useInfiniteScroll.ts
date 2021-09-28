@@ -1,5 +1,6 @@
 import React from "react";
-import { throttle, debounce } from "lodash";
+import debounce from "lodash/debounce";
+import throttle from "lodash/throttle";
 
 import { useSyncToRef } from "./useSyncToRef";
 
@@ -11,9 +12,14 @@ interface UseInfiniteScrollConfig {
   onLoadMore: () => void;
 }
 
-type ScrollableElement = HTMLElement | null | undefined;
+type ScrollableElement = HTMLElement | Window | null | undefined;
 
-function getScrollToBottomSize(element: HTMLElement) {
+function isWindow(element: HTMLElement | Window): element is Window {
+  return element === window;
+}
+
+function getScrollToBottomSize(element: HTMLElement | Window) {
+  if (isWindow(element)) return document.documentElement.scrollHeight - element.scrollY - element.innerHeight;
   return element.scrollHeight - element.scrollTop - element.offsetHeight;
 }
 
@@ -28,7 +34,7 @@ export function useInfiniteScroll({
   const loadingRef = useSyncToRef(loading);
   const hasNextPageRef = useSyncToRef(hasNextPage);
   const onLoadMoreRef = useSyncToRef(onLoadMore);
-  const previousHeight = useSyncToRef<number | null>(null);
+  const previousHeightRef = useSyncToRef<number | null>(null);
 
   React.useEffect(() => {
     if (!scrollableElement) return () => null;
@@ -41,35 +47,31 @@ export function useInfiniteScroll({
     }, scrollCheckInterval);
 
     scrollableElement.addEventListener("scroll", listener);
-    return () => {
-      scrollableElement.removeEventListener("scroll", listener);
-    };
+    return () => scrollableElement.removeEventListener("scroll", listener);
   }, [hasNextPageRef, loadingRef, onLoadMoreRef, scrollCheckInterval, scrollableElement, threshold]);
 
   React.useEffect(() => {
     if (!scrollableElement) return () => null;
+    if (isWindow(scrollableElement)) return;
 
     const resizeObserver = new ResizeObserver(
-      debounce(([entry]: ResizeObserverEntry[]) => {
+      debounce(([entry]) => {
         if (!entry) return;
 
         const newHeight = Math.round(entry.contentRect.height);
 
-        if (previousHeight.current === newHeight) return;
+        if (previousHeightRef.current === newHeight) return;
         if (!hasNextPageRef.current || loadingRef.current) return;
         if (scrollableElement.clientHeight !== scrollableElement.scrollHeight) return;
 
         onLoadMoreRef.current();
-        previousHeight.current = newHeight;
+        previousHeightRef.current = newHeight;
       }, scrollCheckInterval),
     );
 
     resizeObserver.observe(scrollableElement);
-
-    return () => {
-      resizeObserver.disconnect();
-    };
-  }, [scrollableElement, previousHeight, hasNextPageRef, loadingRef, scrollCheckInterval, onLoadMoreRef]);
+    return () => resizeObserver.disconnect();
+  }, [scrollableElement, previousHeightRef, hasNextPageRef, loadingRef, scrollCheckInterval, onLoadMoreRef]);
 
   return setScrollableElement;
 }
