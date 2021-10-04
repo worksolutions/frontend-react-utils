@@ -1,8 +1,8 @@
-import { ConnectRect, ResizeObserverMethodsNames } from "./types";
+import { ResizeObserverMethodsNames } from "./types";
 
 const Global = window || global;
 export class ResizeObserverMocker {
-  static defaultDOMRect: ConnectRect = {
+  static defaultDOMRect: { contentRect: DOMRect } = {
     contentRect: {
       x: 0,
       y: 0,
@@ -12,7 +12,7 @@ export class ResizeObserverMocker {
       right: 0,
       top: 0,
       width: 0,
-    },
+    } as DOMRect,
   };
 
   constructor() {
