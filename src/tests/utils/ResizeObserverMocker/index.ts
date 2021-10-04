@@ -12,7 +12,8 @@ export class ResizeObserverMocker {
       right: 0,
       top: 0,
       width: 0,
-    } as DOMRect,
+      toJSON: () => "",
+    },
   };
 
   constructor() {

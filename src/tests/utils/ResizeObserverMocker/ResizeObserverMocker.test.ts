@@ -13,7 +13,8 @@ const mockRect: DOMRect = {
   bottom: 0,
   left: 100,
   right: 0,
-} as DOMRect;
+  toJSON: () => "",
+};
 
 const newMockRect = { ...mockRect, width: 9999 };
 
