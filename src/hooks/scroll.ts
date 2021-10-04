@@ -85,7 +85,6 @@ export function useScrollToElement(center: boolean, behavior?: ScrollBehavior, p
   };
 }
 
-
 export interface ScrollInfo {
   inStartPos: boolean;
   inEndPos: boolean;

@@ -17,7 +17,7 @@ export function useTimer({
   onSuccess?: () => void;
 }) {
   const forceUpdate = useForceUpdate();
-  const timerRef = useRef<number>(null!);
+  const timerRef = useRef<any>(null!);
   const valueRef = useRef(initialValue() || 0);
 
   const start = useCallback(
