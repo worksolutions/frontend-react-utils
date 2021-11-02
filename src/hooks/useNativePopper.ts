@@ -1,7 +1,6 @@
 import { useLayoutEffect, useMemo, useState } from "react";
 import {
   createPopper,
-  createPopper as defaultCreatePopper,
   Instance as PopperInstance,
   Modifier,
   Options as PopperOptions,
@@ -10,7 +9,7 @@ import {
   State as PopperState,
 } from "@popperjs/core";
 
-type Options = { createPopper?: typeof defaultCreatePopper } & {
+type Options = { createPopper?: typeof createPopper } & {
   placement?: Placement;
   modifiers?: Partial<Modifier<any, any>>[];
   strategy?: PositioningStrategy;
@@ -30,22 +29,16 @@ export function useNativePopper(
   tooltip: HTMLElement | null,
   options: Options,
 ): UsePopperResult {
-  const optionsWithDefaults = {
-    onFirstUpdate: options.onFirstUpdate,
-    placement: options.placement || "bottom",
-    strategy: options.strategy || "absolute",
-    modifiers: options.modifiers || EMPTY_MODIFIERS,
-  };
-
   const [popperInstance, setPopperInstance] = useState<PopperInstance>();
 
   const popperOptions = useMemo(() => {
     return {
-      placement: optionsWithDefaults.placement,
-      strategy: optionsWithDefaults.strategy,
-      modifiers: [...optionsWithDefaults.modifiers],
+      onFirstUpdate: options.onFirstUpdate,
+      placement: options.placement || "bottom",
+      strategy: options.strategy || "absolute",
+      modifiers: options.modifiers || EMPTY_MODIFIERS,
     };
-  }, [optionsWithDefaults.modifiers, optionsWithDefaults.placement, optionsWithDefaults.strategy]);
+  }, [options.modifiers, options.placement, options.strategy, options.onFirstUpdate]);
 
   useLayoutEffect(() => {
     if (!reference) return;
