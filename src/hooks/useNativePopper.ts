@@ -1,18 +1,18 @@
-import { useEffect, useMemo, useState } from "react";
+import { useLayoutEffect, useMemo, useState } from "react";
 import {
   createPopper,
+  createPopper as defaultCreatePopper,
+  Instance as PopperInstance,
   Modifier,
+  Options as PopperOptions,
   Placement,
   PositioningStrategy,
   State as PopperState,
-  Instance as PopperInstance,
-  Options as PopperOptions,
-  createPopper as defaultCreatePopper,
 } from "@popperjs/core";
 
 type Options = { createPopper?: typeof defaultCreatePopper } & {
   placement?: Placement;
-  modifiers?: Array<Partial<Modifier<any, any>>>;
+  modifiers?: Partial<Modifier<any, any>>[];
   strategy?: PositioningStrategy;
   onFirstUpdate?: ((arg: Partial<PopperState>) => void) | undefined;
 };
@@ -47,7 +47,7 @@ export function useNativePopper(
     };
   }, [optionsWithDefaults.modifiers, optionsWithDefaults.placement, optionsWithDefaults.strategy]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!reference) return;
     if (!tooltip) return;
 

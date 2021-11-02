@@ -4,18 +4,20 @@ import { Placement } from "@popperjs/core";
 
 import { useNativePopper } from "../../hooks/useNativePopper";
 import ForceUnmountingComponent from "../../utils/storyHelpers/ForceUnmountingComponent";
-import { selectControl } from "../../utils/storyHelpers/controls";
+import { booleanControl, numbersControl, selectControl } from "../../utils/storyHelpers/controls";
 
 import "./style.css";
 
 export type Props = {
   placement: Placement;
+  flip: boolean;
+  offset: number;
 };
 
-const Demo = ({ placement }: Props) => {
-  const [referenceElement, setReferenceElement] = useState(null);
-  const [popperElement, setPopperElement] = useState(null);
-  const [arrowElement, setArrowElement] = useState(null);
+const Demo = ({ placement, flip, offset }: Props) => {
+  const [referenceElement, setReferenceElement] = useState<HTMLElement | null>(null);
+  const [popperElement, setPopperElement] = useState<HTMLElement | null>(null);
+  const [arrowElement, setArrowElement] = useState<HTMLElement | null>(null);
 
   const modifiers = useMemo(
     () => [
@@ -27,7 +29,7 @@ const Demo = ({ placement }: Props) => {
       },
       {
         name: "flip",
-        enabled: true,
+        enabled: flip,
       },
       {
         name: "hide",
@@ -36,7 +38,7 @@ const Demo = ({ placement }: Props) => {
       {
         name: "offset",
         options: {
-          offset: [0, 8],
+          offset: [0, offset],
         },
       },
       {
@@ -50,7 +52,6 @@ const Demo = ({ placement }: Props) => {
 
   const { state } = useNativePopper(referenceElement, popperElement, {
     placement,
-    strategy: "absolute",
     modifiers,
   });
 
@@ -63,17 +64,16 @@ const Demo = ({ placement }: Props) => {
       <div
         className="tooltip"
         ref={setPopperElement}
-        style={{
-          ...{
+        style={
+          {
             background: "#333",
             color: "white",
-            fontWeight: "bold",
             padding: "50px",
             fontSize: "13px",
             borderRadius: "4px",
-          },
-          ...state?.styles?.popper,
-        }}
+            ...state?.styles?.popper,
+          } as any
+        }
         {...state?.attributes?.popper}
       >
         Popper element
@@ -107,6 +107,27 @@ export default {
         "right",
         "left",
       ]),
+    },
+    flip: {
+      name: "Будет ли поппер изменять свое положение сам",
+      defaultValue: true,
+      ...booleanControl(),
+    },
+    offset: {
+      name: "Отступ от reference елемента",
+      defaultValue: 8,
+      ...numbersControl(0, 100, 1),
+    },
+  },
+  parameters: {
+    componentSource: {
+      code: `
+        useNativePopper(reference: HTMLElement | null, tooltip: HTMLElement | null, options: Options): {
+          state: PopperState | null;
+          forceUpdate: () => void;
+          update: () => Promise<Partial<State>>;
+        }`,
+      language: "typescript",
     },
   },
 } as ComponentMeta<typeof Demo>;
