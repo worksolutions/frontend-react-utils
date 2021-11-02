@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { Placement } from "@popperjs/core";
 
-import { useNativePopper } from "../../hooks/useNativePopper";
+import { useVanillaPopper } from "../../hooks/useVanillaPopper";
 import ForceUnmountingComponent from "../../utils/storyHelpers/ForceUnmountingComponent";
 import { booleanControl, numbersControl, selectControl } from "../../utils/storyHelpers/controls";
 
@@ -50,7 +50,7 @@ const Demo = ({ placement, flip, offset }: Props) => {
     [arrowElement],
   );
 
-  const { state } = useNativePopper(referenceElement, popperElement, {
+  const { state } = useVanillaPopper(referenceElement, popperElement, {
     placement,
     modifiers,
   });
@@ -84,7 +84,7 @@ const Demo = ({ placement, flip, offset }: Props) => {
 };
 
 export default {
-  title: "Hooks/useNativePopper",
+  title: "Hooks/useVanillaPopper",
   component: Demo,
   argTypes: {
     placement: {
@@ -122,7 +122,7 @@ export default {
   parameters: {
     componentSource: {
       code: `
-        useNativePopper(reference: HTMLElement | null, tooltip: HTMLElement | null, options: Options): {
+        useVanillaPopper(reference: HTMLElement | null, tooltip: HTMLElement | null, options: Options): {
           state: PopperState | null;
           forceUpdate: () => void;
           update: () => Promise<Partial<State>>;
@@ -140,7 +140,7 @@ const Template: ComponentStory<typeof Demo> = (props) => {
   );
 };
 
-export const useNativePopperInfo = Template.bind({});
-useNativePopperInfo.args = {};
+export const useVanillaPopperInfo = Template.bind({});
+useVanillaPopperInfo.args = {};
 
-useNativePopperInfo.storyName = "useNativePopper";
+useVanillaPopperInfo.storyName = "useVanillaPopper";

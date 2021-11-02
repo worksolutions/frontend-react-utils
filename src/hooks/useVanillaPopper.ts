@@ -24,7 +24,7 @@ type UsePopperResult = {
   forceUpdate: PopperInstance["forceUpdate"] | null;
 };
 
-export function useNativePopper(
+export function useVanillaPopper(
   reference: HTMLElement | null,
   tooltip: HTMLElement | null,
   options: Options,
