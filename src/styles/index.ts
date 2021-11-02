@@ -19,6 +19,7 @@ import { COLOR_NAME_TYPE } from "./colorTypes";
 
 export * from "./colorTypes";
 export type { AnimationConfig } from "./animations";
+export type { BoxShadowTypeMaker } from "./shadows";
 
 export function buildStyles<COLORS extends COLOR_NAME_TYPE>() {
   const {

@@ -1,5 +1,5 @@
 import React from "react";
-import useMeasureDirty from "react-use/esm/useMeasureDirty";
+import useMeasureDirty from "react-use/lib/useMeasureDirty";
 import { identity } from "ramda";
 
 function getWindowScrollPosition() {
