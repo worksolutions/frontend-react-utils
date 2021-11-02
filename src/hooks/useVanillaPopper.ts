@@ -45,13 +45,9 @@ export function useVanillaPopper(
     if (!tooltip) return;
 
     const popper = createPopper(reference, tooltip, popperOptions);
-    popper?.update();
-    popper?.forceUpdate();
     setPopperInstance(popper);
 
-    return () => {
-      popper.destroy();
-    };
+    return () => popper.destroy();
   }, [reference, tooltip, popperOptions]);
 
   return {
