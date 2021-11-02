@@ -45,6 +45,7 @@ export function useChildrenMeasure(useResizeObserver = false) {
 
       if (useResizeObserver) {
         resizeObserverRef.current = new ResizeObserver(update);
+        resizeObserverRef.current.observe(element);
         return;
       }
 
@@ -53,9 +54,7 @@ export function useChildrenMeasure(useResizeObserver = false) {
     [update, useResizeObserver],
   );
 
-  useEffect(() => {
-    return () => resizeObserverRef.current && resizeObserverRef.current.disconnect();
-  });
+  useEffect(() => () => resizeObserverRef.current?.disconnect(), []);
 
   return { measures, relativeMeasures, initRef, update };
 }
