@@ -13,7 +13,7 @@ type Options = { createPopper?: typeof createPopper } & {
   placement?: Placement;
   modifiers?: Partial<Modifier<any, any>>[];
   strategy?: PositioningStrategy;
-  onFirstUpdate?: ((arg: Partial<PopperState>) => void) | undefined;
+  onFirstUpdate?: ((state: Partial<PopperState>) => void) | undefined;
 };
 
 const EMPTY_MODIFIERS: PopperOptions["modifiers"] = [];
