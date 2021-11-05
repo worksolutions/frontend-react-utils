@@ -36,7 +36,7 @@ const Template: ComponentStory<typeof Demo> = (props) => {
 };
 
 export default {
-  title: "Hooks/useChildrenWidthDetector",
+  title: "Hooks/useChildrenMeasure",
   component: Demo,
   argTypes: {
     useResizeObserver: {
@@ -58,7 +58,7 @@ export default {
   },
 } as ComponentMeta<typeof Demo>;
 
-export const useChildrenWidthDetectorInfo = Template.bind({});
-useChildrenWidthDetectorInfo.args = {};
+export const useChildrenMeasureInfo = Template.bind({});
+useChildrenMeasureInfo.args = {};
 
-useChildrenWidthDetectorInfo.storyName = "useChildrenWidthDetector";
+useChildrenMeasureInfo.storyName = "useChildrenMeasure";
