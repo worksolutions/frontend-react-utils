@@ -17,3 +17,4 @@ export * from "./useMemoizeCallback";
 export * from "./useProvideRef";
 export * from "./useStackState";
 export * from "./useWatchGeolocationPermissions";
+export * from "./useVanillaPopper";
