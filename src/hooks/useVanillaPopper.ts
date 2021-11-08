@@ -18,17 +18,7 @@ type Options = { createPopper?: typeof createPopper } & {
 
 const EMPTY_MODIFIERS: PopperOptions["modifiers"] = [];
 
-type UsePopperResult = {
-  state: PopperState | null;
-  update: PopperInstance["update"] | null;
-  forceUpdate: PopperInstance["forceUpdate"] | null;
-};
-
-export function useVanillaPopper(
-  reference: HTMLElement | null,
-  tooltip: HTMLElement | null,
-  options: Options,
-): UsePopperResult {
+export function useVanillaPopper(reference: HTMLElement | null, popupElement: HTMLElement | null, options: Options) {
   const [popperInstance, setPopperInstance] = useState<PopperInstance>();
 
   const popperOptions = useMemo(() => {
@@ -42,17 +32,13 @@ export function useVanillaPopper(
 
   useLayoutEffect(() => {
     if (!reference) return;
-    if (!tooltip) return;
+    if (!popupElement) return;
 
-    const popper = createPopper(reference, tooltip, popperOptions);
+    const popper = createPopper(reference, popupElement, popperOptions);
     setPopperInstance(popper);
 
     return () => popper.destroy();
-  }, [reference, tooltip, popperOptions]);
+  }, [reference, popupElement, popperOptions]);
 
-  return {
-    forceUpdate: popperInstance ? popperInstance.forceUpdate : null,
-    update: popperInstance ? popperInstance.update : null,
-    state: popperInstance ? popperInstance.state : null,
-  };
+  return popperInstance;
 }

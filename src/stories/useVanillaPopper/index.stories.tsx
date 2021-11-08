@@ -50,7 +50,7 @@ const Demo = ({ placement, flip, offset }: Props) => {
     [arrowElement],
   );
 
-  const { state } = useVanillaPopper(referenceElement, popperElement, {
+  const popper = useVanillaPopper(referenceElement, popperElement, {
     placement,
     modifiers,
   });
@@ -71,10 +71,10 @@ const Demo = ({ placement, flip, offset }: Props) => {
             padding: "50px",
             fontSize: "13px",
             borderRadius: "4px",
-            ...state?.styles?.popper,
+            ...popper?.state?.styles?.popper,
           } as any
         }
-        {...state?.attributes?.popper}
+        {...popper?.state?.attributes?.popper}
       >
         Popper element
         <div className="arrow" ref={setArrowElement} style={{ backgroundColor: "#aaa", width: 20, height: 20 }} />
