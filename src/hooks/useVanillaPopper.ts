@@ -1,4 +1,4 @@
-import { useLayoutEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   createPopper,
   Instance as PopperInstance,
@@ -30,7 +30,7 @@ export function useVanillaPopper(reference: HTMLElement | null, popupElement: HT
     };
   }, [options.modifiers, options.placement, options.strategy, options.onFirstUpdate]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!reference) return;
     if (!popupElement) return;
 
