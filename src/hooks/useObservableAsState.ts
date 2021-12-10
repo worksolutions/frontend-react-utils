@@ -1,5 +1,5 @@
 import React from "react";
-import { observe, toJS } from "mobx";
+import { observe } from "mobx";
 
 export function useObservableAsState<T extends Record<string, any>, K extends keyof T>(
   target: T,
@@ -15,7 +15,7 @@ export function useObservableAsState<T extends Record<string, any>, K extends ke
       key,
       () => {
         if (!mounted) return;
-        setValue(toJS(target[key]));
+        setValue(target[key]);
       },
       invokeImmediately,
     );
