@@ -1,6 +1,6 @@
 import React from "react";
-import debounce from "lodash/debounce";
-import throttle from "lodash/throttle";
+import debounce from "lodash.debounce";
+import throttle from "lodash.throttle";
 
 import { useSyncToRef } from "./useSyncToRef";
 

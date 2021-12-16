@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import debounce from "lodash/debounce";
+import debounce from "lodash.debounce";
 import { once } from "ramda";
 
 export function useBoolean(initial: boolean | (() => boolean)) {

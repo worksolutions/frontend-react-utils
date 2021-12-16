@@ -5,16 +5,12 @@ import { useEffectSkipFirst } from "./common";
 export function useMeasureCallback(callback: (clientRect: DOMRectReadOnly, contentRect: DOMRectReadOnly) => void) {
   const [element, setElement] = React.useState<HTMLElement | null | undefined>();
 
-  const observer = React.useMemo(
-    () => new ResizeObserver(([entry]) => callback(entry.target.getBoundingClientRect(), entry.contentRect)),
-    [callback],
-  );
-
   useEffectSkipFirst(() => {
     if (!element) return () => null;
+    const observer = new ResizeObserver(([entry]) => callback(entry.target.getBoundingClientRect(), entry.contentRect));
     observer.observe(element);
-    return () => observer.unobserve(element);
-  }, [element]);
+    return () => observer.disconnect();
+  }, [element, callback]);
 
   return [setElement, element] as const;
 }
