@@ -20,7 +20,7 @@ const Demo = (props: { useResizeObserver: boolean }) => {
         ))}
       </div>
       <DebugComponent data={measures} />
-      <div onClick={update} style={{ marginTop: 20, cursor: "pointer", fontWeight: 700 }}>
+      <div onClick={() => update()} style={{ marginTop: 20, cursor: "pointer", fontWeight: 700 }}>
         Update widths
       </div>
     </div>

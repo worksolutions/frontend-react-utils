@@ -6,11 +6,12 @@ export function useChildrenMeasure(useResizeObserver = false) {
   const [relativeMeasures, setRelativeMeasures] = React.useState<DOMRect[] | null>(null);
   const elementRef = React.useRef<HTMLElement | null>(null);
 
-  const update = React.useCallback(() => {
+  const update = React.useCallback((filter?: (element: HTMLElement, index: number) => any) => {
     if (!elementRef.current) return;
-    const childrenRects = htmlCollectionToArray(elementRef.current.children).map((element) =>
-      element.getBoundingClientRect(),
-    );
+    const children = htmlCollectionToArray(elementRef.current.children);
+    const filteredChildren = filter ? children.filter(filter) : children;
+    const childrenRects = filteredChildren.map((element) => element.getBoundingClientRect());
+
     const parentRect = elementRef.current.getBoundingClientRect();
     setMeasures(childrenRects);
     setRelativeMeasures(
@@ -33,16 +34,16 @@ export function useChildrenMeasure(useResizeObserver = false) {
   }, []);
 
   const initRef = React.useCallback(
-    (element: HTMLElement | null) => {
+    (element: HTMLElement | null, filter?: (element: HTMLElement, index: number) => any) => {
       elementRef.current = element;
       if (!element) return;
 
       if (useResizeObserver) {
-        new ResizeObserver(update).observe(element);
+        new ResizeObserver(() => update(filter)).observe(element);
         return;
       }
 
-      update();
+      update(filter);
     },
     [update, useResizeObserver],
   );
