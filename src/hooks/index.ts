@@ -10,7 +10,7 @@ export * from "./useTimer";
 export * from "./useStickyEffectDetector";
 export * from "./useEventEmitter";
 export * from "./useSyncToRef";
-export * from "./useObservableAsState";
+export * from "./mobx";
 export * from "./useInfiniteScroll";
 export * from "./useMemoizeCallback";
 export * from "./useProvideRef";
