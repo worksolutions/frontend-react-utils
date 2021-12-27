@@ -1,10 +1,12 @@
 import React, { DependencyList } from "react";
-import { observe } from "mobx";
+import { observe, toJS } from "mobx";
+
+type ObservableOptions = { fireImmediately?: boolean; convertToJS?: boolean };
 
 export function useObservableAsState<T extends Record<string, any>, K extends keyof T>(
   target: T,
   key: K,
-  invokeImmediately?: boolean,
+  { fireImmediately, convertToJS }: ObservableOptions = {},
 ): T[K] {
   const [value, setValue] = React.useState(() => target[key]);
 
@@ -15,15 +17,16 @@ export function useObservableAsState<T extends Record<string, any>, K extends ke
       key,
       () => {
         if (!mounted) return;
-        setValue(target[key]);
+        const value = target[key];
+        setValue(convertToJS ? toJS(value) : value);
       },
-      invokeImmediately,
+      fireImmediately,
     );
     return () => {
       mounted = false;
       unmount();
     };
-  }, [invokeImmediately, key, target]);
+  }, [fireImmediately, key, target]);
 
   return value;
 }
@@ -32,15 +35,15 @@ export function useObservableAsDeferredMemo<RESULT, TARGET>(
   callback: (target: TARGET) => RESULT,
   dependencies: DependencyList,
   target: TARGET,
-  invokeImmediately?: boolean,
+  { fireImmediately, convertToJS }: ObservableOptions = {},
 ) {
   const memoCallback = React.useCallback(callback, dependencies);
 
   const [value, setValue] = React.useState(() => memoCallback(target));
 
   React.useEffect(
-    () => observe(target, () => setValue(memoCallback(target)), invokeImmediately),
-    [memoCallback, invokeImmediately, target],
+    () => observe(target, () => setValue(memoCallback(convertToJS ? toJS(target) : target)), fireImmediately),
+    [memoCallback, fireImmediately, target],
   );
 
   return value;
