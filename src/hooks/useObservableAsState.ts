@@ -1,5 +1,6 @@
 import React from "react";
 import { observe, toJS } from "mobx";
+import { isString } from "@worksolutions/utils";
 
 export type ObservableAsStateOptions = { fireImmediately?: boolean; convertToJS?: boolean };
 
@@ -34,13 +35,13 @@ export function useObservableAsState<T>(target: T, ...otherOptions: any[]) {
   return value;
 }
 
-function getOverloadedParams(parasm: any[]): {
+function getOverloadedParams(params: any[]): {
   key: string | undefined;
   fireImmediately?: boolean;
   convertToJS?: boolean;
 } {
-  if (parasm.length === 2) return { key: parasm[0], ...(parasm[1] || {}) };
-  return { key: undefined, ...(parasm[0] || {}) };
+  if (isString(params[0])) return { key: params[0], ...(params[1] || {}) };
+  return { key: undefined, ...(params[0] || {}) };
 }
 
 function createObserver(target: any, key: any, callback: () => void, fireImmediately?: boolean) {
