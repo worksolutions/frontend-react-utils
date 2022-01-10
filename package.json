@@ -1,7 +1,7 @@
 {
   "name": "@worksolutions/react-utils",
   "private": false,
-  "version": "2.0.8",
+  "version": "2.0.9",
   "description": "",
   "types": "dist/esm/index.d.ts",
   "main": "dist/cjs/index.js",
@@ -18,7 +18,8 @@
     "build-storybook": "build-storybook -o docs"
   },
   "dependencies": {
-    "@worksolutions/utils": "^1.2.39",
+    "mobx": "^6.3.12",
+    "@worksolutions/utils": "^1.3.1",
     "lodash.debounce": "^4.*",
     "lodash.throttle": "^4.*",
     "ramda": "^0.27.1",
