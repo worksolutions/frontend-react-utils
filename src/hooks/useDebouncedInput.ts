@@ -12,15 +12,18 @@ export function useDebouncedInput<T>(
 
   React.useEffect(() => setInputValue(value), [value]);
 
-  return {
-    inputValue,
-    clear: () => {
-      setInputValue("");
-      run("");
-    },
-    onInputChange: (value: string, additionalData?: T) => {
+  const clear = React.useCallback(() => {
+    setInputValue("");
+    run("");
+  }, [run]);
+
+  const handleChangeInput = React.useCallback(
+    (value: string, additionalData?: T) => {
       setInputValue(value);
       run(value, additionalData);
     },
-  };
+    [run],
+  );
+
+  return { inputValue, clear, onInputChange: handleChangeInput };
 }

@@ -25,14 +25,14 @@ export function useForceUpdate() {
   return useCallback(() => updateState({}), []);
 }
 
-export function useDebounce(debounceTime: number, callback: (...args: any[]) => void) {
-  const debounceRef = useRef<ReturnType<typeof debounce>>(null!);
+export function useDebounce<ARGS extends any[]>(debounceTime: number, callback: (...args: ARGS) => void) {
+  const debounceRef = useRef<((...args: ARGS) => void) & { cancel: Function }>(null!);
   useEffect(() => {
     debounceRef.current = debounce(callback, debounceTime);
     return () => debounceRef.current.cancel();
   }, [callback]);
 
-  return { run: (...args: any) => debounceRef.current(...args), debounceRef };
+  return { run: debounceRef.current, debounceRef };
 }
 
 export const useEffectSkipFirst = (callback: React.EffectCallback, dependencies?: any[]) => {
