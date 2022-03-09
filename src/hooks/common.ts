@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import debounce from "lodash.debounce";
 import { once } from "ramda";
 
@@ -25,14 +25,11 @@ export function useForceUpdate() {
   return useCallback(() => updateState({}), []);
 }
 
-export function useDebounce<ARGS extends any[]>(debounceTime: number, callback: (...args: ARGS) => void) {
-  const debounceRef = useRef<((...args: ARGS) => void) & { cancel: Function }>(null!);
-  useEffect(() => {
-    debounceRef.current = debounce(callback, debounceTime);
-    return () => debounceRef.current.cancel();
-  }, [callback]);
-
-  return { run: debounceRef.current, debounceRef };
+export function useDebounceRef<ARGS extends any[]>(debounceTime: number, callback: (...args: ARGS) => void) {
+  const memoizedDebounce = useMemo(() => debounce(callback, debounceTime), [callback, debounceTime]);
+  const debounceRef = useRef<((...args: ARGS) => void) & { cancel: Function }>(memoizedDebounce);
+  useEffect(() => () => debounceRef.current.cancel(), [callback]);
+  return debounceRef;
 }
 
 export const useEffectSkipFirst = (callback: React.EffectCallback, dependencies?: any[]) => {
