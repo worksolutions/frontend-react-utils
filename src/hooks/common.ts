@@ -28,7 +28,8 @@ export function useForceUpdate() {
 export function useDebounceRef<ARGS extends any[]>(debounceTime: number, callback: (...args: ARGS) => void) {
   const memoizedDebounce = useMemo(() => debounce(callback, debounceTime), [callback, debounceTime]);
   const debounceRef = useRef<((...args: ARGS) => void) & { cancel: Function }>(memoizedDebounce);
-  useEffect(() => () => debounceRef.current.cancel(), [callback]);
+  useEffectSkipFirst(() => void (debounceRef.current = memoizedDebounce), [memoizedDebounce]);
+  useEffect(() => () => debounceRef.current.cancel(), [memoizedDebounce]);
   return debounceRef;
 }
 
