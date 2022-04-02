@@ -23,7 +23,10 @@ export function useFileSelector(
       onChange(multiply ? files.map(convertFileToFileInterface) : (convertFileToFileInterface(files[0]) as any)),
     [onChange],
   );
-  const input = React.useMemo(() => createFileInput(handleChange, false, acceptTypes), [handleChange, acceptTypes]);
+  const input = React.useMemo(
+    () => createFileInput(handleChange, multiply, acceptTypes),
+    [multiply, handleChange, acceptTypes],
+  );
   const [dropAreaProps, dropAreaState] = useDropArea({ onFiles: handleChange });
 
   React.useEffect(() => () => void input.destroy(), []);
