@@ -1,7 +1,7 @@
 {
   "name": "@worksolutions/react-utils",
   "private": false,
-  "version": "2.0.15",
+  "version": "2.0.16",
   "description": "",
   "types": "dist/esm/index.d.ts",
   "main": "dist/cjs/index.js",
@@ -21,8 +21,8 @@
     "lodash.debounce": "^4.*",
     "lodash.throttle": "^4.*",
     "ramda": "^0.28.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "*",
+    "react-dom": "*",
     "react-use": "^17.3.2",
     "@popperjs/core": "^2.11.4"
   },
