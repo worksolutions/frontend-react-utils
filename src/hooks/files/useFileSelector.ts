@@ -29,7 +29,7 @@ export function useFileSelector(
   );
   const [dropAreaProps, dropAreaState] = useDropArea({ onFiles: handleChange });
 
-  React.useEffect(() => () => void input.destroy(), []);
+  React.useEffect(() => () => input.destroy(), [input]);
 
   return {
     dropAreaProps,
