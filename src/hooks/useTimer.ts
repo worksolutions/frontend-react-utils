@@ -51,7 +51,7 @@ export function useTimer({
   useEffect(() => {
     valueRef.current = initialValue();
     return () => clearInterval(timerRef.current);
-  }, []);
+  }, [initialValue]);
 
   return {
     value: valueRef.current,

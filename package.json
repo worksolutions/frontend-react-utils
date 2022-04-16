@@ -1,7 +1,7 @@
 {
   "name": "@worksolutions/react-utils",
   "private": false,
-  "version": "2.0.17",
+  "version": "2.0.19",
   "description": "",
   "types": "dist/esm/index.d.ts",
   "main": "dist/cjs/index.js",
@@ -13,11 +13,12 @@
   "scripts": {
     "test": "jest",
     "format": "prettier --write --list-different \"src/**/*.{ts,tsx,js,json,yml}\"",
-    "build": "rm -rf dist && NODE_ENV=production && tsc --module ESNext --outDir dist/esm && tsc --module commonjs --outDir dist/cjs"
+    "build": "rm -rf dist && NODE_ENV=production && tsc --module ESNext --outDir dist/esm && tsc --module commonjs --outDir dist/cjs",
+    "lint": "eslint \"src/**/*.{ts,tsx}\""
   },
   "dependencies": {
     "mobx": "^6.4.2",
-    "@worksolutions/utils": "^1.3.7",
+    "@worksolutions/utils": "^1.3.10",
     "lodash.debounce": "^4.*",
     "lodash.throttle": "^4.*",
     "ramda": "^0.28.0",
@@ -27,7 +28,6 @@
     "@popperjs/core": "^2.11.4"
   },
   "devDependencies": {
-    "@babel/core": "^7.17.7",
     "@testing-library/react": "^12.1.4",
     "@testing-library/react-hooks": "^7.0.2",
     "@types/jest": "^27.4.1",
@@ -42,6 +42,35 @@
     "jest-esm-transformer": "^1.0.0",
     "prettier": "^2.6.0",
     "ts-jest": "^27.1.3",
-    "typescript": "^4.6.2"
+    "typescript": "^4.6.2",
+    "eslint-config-react-app": "^7.0.0",
+    "eslint-plugin-flowtype": "^8.0.3",
+    "eslint-plugin-jest": "^26.1.1",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-react": "^7.29.4",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "eslint-plugin-sonarjs": "^0.12.0",
+    "eslint-plugin-testing-library": "^5.1.0"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "./node_modules/@worksolutions/utils/package.json"
+    ],
+    "rules": {
+      "jsx-a11y/alt-text": "off",
+      "react/display-name": "off",
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "error",
+      "react/jsx-closing-bracket-location": [
+        "error",
+        "tag-aligned"
+      ],
+      "react/jsx-curly-brace-presence": [
+        "error",
+        "never"
+      ],
+      "react/jsx-curly-spacing": "error"
+    }
   }
 }

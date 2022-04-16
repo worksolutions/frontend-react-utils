@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 
 export type HookWatchGeolocationPermissionsParams = { ones?: boolean };
 export type HookWatchGeolocationPermissionsReturnType = PermissionsState;
@@ -19,15 +19,18 @@ export function useWatchGeolocationPermissions({
     prompt: null,
   });
 
-  const setPromptPermission = () => setPermissions({ granted: false, denied: false, prompt: true });
-  const setGrantedPermission = () => setPermissions({ granted: true, denied: false, prompt: false });
-  const setDeniedPermission = () => setPermissions({ granted: false, denied: true, prompt: false });
+  const setPromptPermission = useCallback(() => setPermissions({ granted: false, denied: false, prompt: true }), []);
+  const setGrantedPermission = useCallback(() => setPermissions({ granted: true, denied: false, prompt: false }), []);
+  const setDeniedPermission = useCallback(() => setPermissions({ granted: false, denied: true, prompt: false }), []);
 
-  function onChangeGeolocationPermission(this: PermissionStatus) {
-    if (this.state === "prompt") setPromptPermission();
-    if (this.state === "denied") setDeniedPermission();
-    if (this.state === "granted") setGrantedPermission();
-  }
+  const onChangeGeolocationPermission = useCallback(
+    function onChangeGeolocationPermission(this: PermissionStatus) {
+      if (this.state === "prompt") setPromptPermission();
+      if (this.state === "denied") setDeniedPermission();
+      if (this.state === "granted") setGrantedPermission();
+    },
+    [setDeniedPermission, setGrantedPermission, setPromptPermission],
+  );
 
   useEffect(() => {
     navigator.permissions.query({ name: "geolocation" }).then((permissionStatus) => {
@@ -42,7 +45,7 @@ export function useWatchGeolocationPermissions({
       if (!permissionStatusRef.current) return;
       permissionStatusRef.current.onchange = null;
     };
-  }, []);
+  }, [onChangeGeolocationPermission, ones]);
 
   const isReceivedState = () =>
     permissions.denied !== null && permissions.granted !== null && permissions.prompt !== null;

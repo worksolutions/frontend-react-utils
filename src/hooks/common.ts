@@ -33,11 +33,12 @@ export function useDebounceRef<ARGS extends any[]>(debounceTime: number, callbac
   return debounceRef;
 }
 
-export const useEffectSkipFirst = (callback: React.EffectCallback, dependencies?: any[]) => {
+export const useEffectSkipFirst = (callback: React.EffectCallback, dependencies?: React.DependencyList) => {
   const wasChanged = useRef(false);
   useEffect(function () {
     if (wasChanged.current) return callback();
     wasChanged.current = true;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, dependencies);
 };
 

@@ -12,10 +12,11 @@ export function useMemoizeCallback<ARGS extends any[], RESULT>(
   callback: (...args: ARGS) => RESULT,
   deps: DependencyList = [],
 ): (...args: ARGS) => RESULT {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const memoizedCallback = React.useCallback(callback, deps);
 
-  return React.useMemo(() => memoizeWith((memoizeWithParam || (() => null)) as any, memoizedCallback as any), [
-    memoizeWithParam,
-    memoizedCallback,
-  ]);
+  return React.useMemo(
+    () => memoizeWith((memoizeWithParam || (() => null)) as any, memoizedCallback as any),
+    [memoizeWithParam, memoizedCallback],
+  );
 }

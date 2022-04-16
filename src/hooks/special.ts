@@ -1,12 +1,13 @@
 import { useEffect } from "react";
 
-export const useSetDocumentTitle = (title?: string, timeout = 0) => {
+export function useDocumentTitle(title: string, timeout = 0) {
   useEffect(() => {
-    if (!title) return;
+    if (title === "") return;
     if (timeout === 0) {
       document.title = title;
       return;
     }
+
     setTimeout(() => (document.title = title), timeout);
-  }, [title]);
-};
+  }, [timeout, title]);
+}

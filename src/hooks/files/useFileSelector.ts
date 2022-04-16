@@ -21,7 +21,7 @@ export function useFileSelector(
   const handleChange = React.useCallback(
     (files: File[]) =>
       onChange(multiply ? files.map(convertFileToFileInterface) : (convertFileToFileInterface(files[0]) as any)),
-    [onChange],
+    [multiply, onChange],
   );
   const input = React.useMemo(
     () => createFileInput(handleChange, multiply, acceptTypes),

@@ -10,6 +10,7 @@ export function useObservableAsDeferredMemo<RESULT, TARGET>(
   target: TARGET,
   { fireImmediately = true, convertToJS }: ObservableAsStateOptions = {},
 ) {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const memoCallback = React.useCallback(callback, dependencies);
 
   const [value, setValue] = React.useState(() => memoCallback(convertToJS ? toJS(target) : target));
@@ -23,7 +24,7 @@ export function useObservableAsDeferredMemo<RESULT, TARGET>(
     }
 
     return observe(target, callback, fireImmediately);
-  }, [memoCallback, fireImmediately, target]);
+  }, [memoCallback, fireImmediately, target, convertToJS]);
 
   return value;
 }
