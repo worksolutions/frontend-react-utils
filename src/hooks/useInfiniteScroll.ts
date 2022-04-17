@@ -132,7 +132,7 @@ function useResizeObserver({
   loading: React.MutableRefObject<boolean>;
   onLoadMore: React.MutableRefObject<() => void>;
 }) {
-  const previousHeightRef = useSyncToRef<number | null>(null);
+  const previousActiveClientHeight = useSyncToRef(0);
 
   React.useEffect(() => {
     if (!scrollableElement) return () => null;
@@ -142,18 +142,19 @@ function useResizeObserver({
       debounce(([entry]: ResizeObserverEntry[]) => {
         if (!entry) return;
 
-        const newHeight = Math.round(entry.contentRect.height);
+        const newClientHeight = Math.round(entry.contentRect.height);
 
-        if (previousHeightRef.current === newHeight) return;
+        if (newClientHeight === 0) return;
+        if (previousActiveClientHeight.current === newClientHeight) return;
         if (!hasNextPage.current || loading.current) return;
         if (scrollableElement.clientHeight !== scrollableElement.scrollHeight) return;
 
         onLoadMore.current();
-        previousHeightRef.current = newHeight;
+        previousActiveClientHeight.current = newClientHeight;
       }, scrollCheckInterval),
     );
 
     resizeObserver.observe(scrollableElement);
     return () => resizeObserver.disconnect();
-  }, [scrollableElement, previousHeightRef, hasNextPage, loading, scrollCheckInterval, onLoadMore]);
+  }, [scrollableElement, previousActiveClientHeight, hasNextPage, loading, scrollCheckInterval, onLoadMore]);
 }
