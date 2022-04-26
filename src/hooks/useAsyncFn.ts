@@ -29,7 +29,7 @@ export type AsyncState<T> =
     };
 
 const initialStateValue = { loading: false };
-export default function useAsyncFn<FUNC extends (...args: any[]) => Promise<any>>(
+export function useAsyncFn<FUNC extends (...args: any[]) => Promise<any>>(
   func: FUNC,
   deps: DependencyList = [],
   initialState: AsyncState<ReturnType<FUNC>> = initialStateValue,
