@@ -32,14 +32,16 @@ const initialStateValue = { loading: false };
 export function useAsyncFn<FUNC extends (...args: any[]) => Promise<any>>(
   func: FUNC,
   deps: DependencyList = [],
-  initialState: AsyncState<ReturnType<FUNC>> = initialStateValue,
+  initialState: AsyncState<
+    ReturnType<FUNC> extends Promise<infer PROMISE_RESULT> ? PROMISE_RESULT : unknown
+  > = initialStateValue,
 ) {
   const lastCallId = React.useRef(0);
   const isMounted = useMountedState();
   const [state, setState] = React.useState(initialState);
   const stateRef = useSyncToRef(state);
 
-  const callback = useCallback((...args: Parameters<FUNC>): ReturnType<FUNC> => {
+  const callback = useCallback((...args: Parameters<FUNC>) => {
     const callId = ++lastCallId.current;
 
     if (!stateRef.current.loading) setState(assoc("loading", true));
@@ -53,7 +55,7 @@ export function useAsyncFn<FUNC extends (...args: any[]) => Promise<any>>(
         if (isMounted() && callId === lastCallId.current) setState({ error, loading: false });
         return error;
       },
-    ) as ReturnType<FUNC>;
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
 
