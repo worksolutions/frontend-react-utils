@@ -32,6 +32,8 @@ export function useChildrenMeasure(useResizeObserver = false) {
       }),
     );
   }, []);
+  const resizeObserver = React.useRef<ResizeObserver | null>(null);
+  React.useEffect(() => () => resizeObserver.current?.disconnect(), []);
 
   const initRef = React.useCallback(
     (element: HTMLElement | null, filter?: (element: HTMLElement, index: number) => any) => {
@@ -39,7 +41,8 @@ export function useChildrenMeasure(useResizeObserver = false) {
       if (!element) return;
 
       if (useResizeObserver) {
-        new ResizeObserver(() => update(filter)).observe(element);
+        resizeObserver.current = new ResizeObserver(() => update(filter));
+        resizeObserver.current.observe(element);
         return;
       }
 
@@ -47,5 +50,6 @@ export function useChildrenMeasure(useResizeObserver = false) {
     },
     [update, useResizeObserver],
   );
+
   return { measures, relativeMeasures, initRef, update };
 }
