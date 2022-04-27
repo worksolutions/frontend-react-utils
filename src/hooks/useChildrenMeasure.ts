@@ -1,6 +1,8 @@
 import React from "react";
 import { htmlCollectionToArray } from "@worksolutions/utils";
 
+import { useDebounceRef } from "./common";
+
 export function useChildrenMeasure(useResizeObserver = false) {
   const [measures, setMeasures] = React.useState<DOMRect[] | null>(null);
   const [relativeMeasures, setRelativeMeasures] = React.useState<DOMRect[] | null>(null);
@@ -32,8 +34,13 @@ export function useChildrenMeasure(useResizeObserver = false) {
       }),
     );
   }, []);
+
+  const debouncedUpdate = useDebounceRef(20, update);
+
   const resizeObserver = React.useRef<ResizeObserver | null>(null);
   React.useEffect(() => () => resizeObserver.current?.disconnect(), []);
+  const mutationObserver = React.useRef<MutationObserver | null>(null);
+  React.useEffect(() => () => mutationObserver.current?.disconnect(), []);
 
   const initRef = React.useCallback(
     (element: HTMLElement | null, filter?: (element: HTMLElement, index: number) => any) => {
@@ -41,14 +48,21 @@ export function useChildrenMeasure(useResizeObserver = false) {
       if (!element) return;
 
       if (useResizeObserver) {
-        resizeObserver.current = new ResizeObserver(() => update(filter));
+        resizeObserver.current = new ResizeObserver(() => debouncedUpdate.current(filter));
         resizeObserver.current.observe(element);
+        mutationObserver.current = new MutationObserver(() => debouncedUpdate.current(filter));
+        mutationObserver.current.observe(element, {
+          childList: true,
+          subtree: true,
+          attributes: true,
+          attributeFilter: ["class"],
+        });
         return;
       }
 
-      update(filter);
+      debouncedUpdate.current(filter);
     },
-    [update, useResizeObserver],
+    [debouncedUpdate, useResizeObserver],
   );
 
   return { measures, relativeMeasures, initRef, update };
