@@ -40,11 +40,14 @@ export function useAsyncFn<FUNC extends (...args: any[]) => Promise<any>>(
   const isMounted = useMountedState();
   const [state, setState] = React.useState(initialState);
   const stateRef = useSyncToRef(state);
+  const loadingAvailable = React.useRef(true);
+  const enableLoadingAvailable = useCallback(() => (loadingAvailable.current = true), []);
+  const disableLoadingAvailable = useCallback(() => (loadingAvailable.current = false), []);
 
   const callback = useCallback((...args: Parameters<FUNC>) => {
     const callId = ++lastCallId.current;
 
-    if (!stateRef.current.loading) setState(assoc("loading", true));
+    if (!stateRef.current.loading && loadingAvailable.current) setState(assoc("loading", true));
 
     return func(...args).then(
       (value) => {
@@ -59,5 +62,5 @@ export function useAsyncFn<FUNC extends (...args: any[]) => Promise<any>>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
 
-  return [state, callback] as const;
+  return [state, callback, enableLoadingAvailable, disableLoadingAvailable] as const;
 }
