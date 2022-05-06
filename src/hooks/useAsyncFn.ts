@@ -7,32 +7,20 @@ import { assoc } from "ramda";
 import { useSyncToRef } from "./useSyncToRef";
 
 export type AsyncState<T> =
-  | {
-      loading: boolean;
-      error?: undefined;
-      value?: undefined;
-    }
-  | {
-      loading: true;
-      error?: Error | undefined;
-      value?: T;
-    }
-  | {
-      loading: false;
-      error: Error;
-      value?: undefined;
-    }
-  | {
-      loading: false;
-      error?: undefined;
-      value: T;
-    };
+  | { loading: boolean; error?: undefined; value?: undefined }
+  | { loading: true; error?: Error | undefined; value?: T }
+  | { loading: false; error: Error; value?: undefined }
+  | { loading: false; error?: undefined; value: T };
+
+type FunctionReturningPromise<VALUE> = (...args: any[]) => Promise<VALUE>;
 
 const initialStateValue = { loading: false };
-export function useAsyncFn<FUNC extends (...args: any[]) => Promise<FUNC_RESULT>, FUNC_RESULT>(
+export function useAsyncFn<FUNC extends FunctionReturningPromise<any>>(
   func: FUNC,
   deps: DependencyList = [],
-  initialState: AsyncState<FUNC_RESULT> = initialStateValue,
+  initialState: AsyncState<
+    FUNC extends FunctionReturningPromise<infer RESULT> ? RESULT : unknown
+  > = initialStateValue as any,
 ) {
   const lastCallId = React.useRef(0);
   const isMounted = useMountedState();
