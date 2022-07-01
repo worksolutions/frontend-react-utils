@@ -6,7 +6,7 @@ import { useSyncToRef } from "./useSyncToRef";
 
 type UseInfiniteScrollDirection = "down" | "up";
 
-interface UseInfiniteScrollConfig {
+interface UseInfinityScrollConfig {
   loading: boolean;
   hasNextPage: boolean;
   threshold?: number;
@@ -33,7 +33,7 @@ const scrollRemainderDetectors = {
   },
 };
 
-export function useInfiniteScroll({
+export function useInfinityScroll({
   scrollCheckInterval = 200,
   threshold = 200,
   loading,
@@ -41,8 +41,8 @@ export function useInfiniteScroll({
   direction = "down",
   hasNextPage,
   onLoadMore,
-}: UseInfiniteScrollConfig) {
-  const [scrollableElement, setScrollableElement] = React.useState<ScrollableElement | null>(null);
+}: UseInfinityScrollConfig) {
+  const [scrollableElement, setScrollableElement] = React.useState<ScrollableElement>(null);
   const loadingRef = useSyncToRef(loading);
   const hasNextPageRef = useSyncToRef(hasNextPage);
   const onLoadMoreRef = useSyncToRef(onLoadMore);
