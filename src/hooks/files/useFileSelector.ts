@@ -24,16 +24,16 @@ export function useFileSelector(
     [multiply, onChange],
   );
   const input = React.useMemo(
-    () => createFileInput(handleChange, multiply, acceptTypes),
+    () => (process.browser ? createFileInput(handleChange, multiply, acceptTypes) : null),
     [multiply, handleChange, acceptTypes],
   );
   const [dropAreaProps, dropAreaState] = useDropArea({ onFiles: handleChange });
 
-  React.useEffect(() => () => input.destroy(), [input]);
+  React.useEffect(() => () => input?.destroy(), [input]);
 
   return {
     dropAreaProps,
     dropping: dropAreaState.over,
-    openNativeFileDialog: React.useCallback(() => input.open(), [input]),
+    openNativeFileDialog: React.useCallback(() => input?.open(), [input]),
   };
 }
