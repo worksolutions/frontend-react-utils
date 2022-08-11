@@ -1,7 +1,7 @@
 {
   "name": "@worksolutions/react-utils",
   "private": false,
-  "version": "2.0.32",
+  "version": "2.0.33",
   "description": "",
   "types": "dist/esm/index.d.ts",
   "main": "dist/cjs/index.js",
@@ -25,7 +25,8 @@
     "react": "*",
     "react-dom": "*",
     "react-use": "^17.*",
-    "@popperjs/core": "^2.*"
+    "@popperjs/core": "^2.*",
+    "mobx-utils": "^6.0.5"
   },
   "devDependencies": {
     "@types/lodash.debounce": "^4.*",

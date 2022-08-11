@@ -1,14 +1,14 @@
 import React, { DependencyList } from "react";
-import { observe, toJS } from "mobx";
+import { toJS } from "mobx";
 import { isPureObject } from "@worksolutions/utils";
 
-import { ObservableAsStateOptions } from "./useObservableAsState";
+import { createObserverForStateHook, ObservableAsStateOptions } from "./useObservableAsSimpleValue";
 
 export function useObservableAsDeferredMemo<RESULT, TARGET>(
   callback: (target: TARGET) => RESULT,
   dependencies: DependencyList,
   target: TARGET,
-  { fireImmediately = true, convertToJS }: ObservableAsStateOptions = {},
+  { fireImmediately = true, convertToJS, deep }: ObservableAsStateOptions = {},
 ) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const memoCallback = React.useCallback(callback, dependencies);
@@ -20,11 +20,11 @@ export function useObservableAsDeferredMemo<RESULT, TARGET>(
 
     if (fireImmediately && isPureObject(target)) {
       callback();
-      return observe(target, callback);
+      return createObserverForStateHook(target, undefined, callback, { deep });
     }
 
-    return observe(target, callback, fireImmediately);
-  }, [memoCallback, fireImmediately, target, convertToJS]);
+    return createObserverForStateHook(target, undefined, callback, { deep, fireImmediately });
+  }, [memoCallback, fireImmediately, target, convertToJS, deep]);
 
   return value;
 }
