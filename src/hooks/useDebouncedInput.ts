@@ -2,10 +2,11 @@ import React, { useState } from "react";
 
 import { useDebounceRef } from "./common";
 
-export function useDebouncedInput<T>(
-  value: string,
+export function useDebouncedInput<VALUE>(
+  value: VALUE,
   debounceTime: number,
-  onChange: (value: string, additionalData?: T) => void,
+  onChange: (value: VALUE) => void,
+  clearValue?: VALUE,
 ) {
   const [inputValue, setInputValue] = useState(value);
   const onChangeDebounce = useDebounceRef(debounceTime, onChange);
@@ -13,14 +14,15 @@ export function useDebouncedInput<T>(
   React.useEffect(() => setInputValue(value), [value]);
 
   const clear = React.useCallback(() => {
-    setInputValue("");
-    onChangeDebounce.current("");
-  }, [onChangeDebounce]);
+    if (!clearValue) return;
+    setInputValue(clearValue);
+    onChangeDebounce.current(clearValue);
+  }, [clearValue, onChangeDebounce]);
 
   const handleChangeInput = React.useCallback(
-    (value: string, additionalData?: T) => {
+    (value: VALUE) => {
       setInputValue(value);
-      onChangeDebounce.current(value, additionalData);
+      onChangeDebounce.current(value);
     },
     [onChangeDebounce],
   );
