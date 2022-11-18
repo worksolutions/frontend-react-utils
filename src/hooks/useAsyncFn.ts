@@ -17,7 +17,7 @@ type FunctionReturningPromise<VALUE> = (...args: any[]) => Promise<VALUE>;
 const initialStateValue = { loading: false };
 export function useAsyncFn<FUNC extends FunctionReturningPromise<any>>(
   func: FUNC,
-  deps: DependencyList = [],
+  deps: DependencyList,
   initialState: AsyncState<
     FUNC extends FunctionReturningPromise<infer RESULT> ? RESULT : unknown
   > = initialStateValue as any,
