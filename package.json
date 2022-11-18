@@ -1,7 +1,7 @@
 {
   "name": "@worksolutions/react-utils",
   "private": false,
-  "version": "2.0.35",
+  "version": "2.0.36",
   "description": "",
   "types": "dist/esm/index.d.ts",
   "main": "dist/cjs/index.js",
@@ -43,6 +43,14 @@
   "eslintConfig": {
     "extends": [
       "@worksolutions/common"
-    ]
+    ],
+    "rules": {
+      "react-hooks/exhaustive-deps": [
+        "error",
+        {
+          "additionalHooks": "(useAsyncFn|useEffectSkipFirst|useMemoizeCallback|useObservableAsDeferredMemo)"
+        }
+      ]
+    }
   }
 }

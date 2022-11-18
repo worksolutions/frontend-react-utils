@@ -19,13 +19,13 @@ export function useEventEmitter<
     }) as Handler;
     eventEmitter.on(eventType, resultHandler);
     previousHandlerRef.current = resultHandler;
-  }, [previousHandlerRef, eventEmitter, eventType, handler]);
+  }, [eventEmitter, eventType, handler]);
 
   useEffect(
     () => () => {
       if (!previousHandlerRef.current) return;
       eventEmitter.removeListener(eventType, previousHandlerRef.current);
     },
-    [previousHandlerRef, eventEmitter, eventType],
+    [eventEmitter, eventType],
   );
 }
