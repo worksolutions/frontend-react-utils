@@ -2,23 +2,26 @@ import { useEffect, useMemo, useState } from "react";
 import {
   createPopper,
   Instance as PopperInstance,
-  Modifier,
   Options as PopperOptions,
   Placement,
   PositioningStrategy,
   State as PopperState,
 } from "@popperjs/core";
 
-type Options = { createPopper?: typeof createPopper } & {
+export type VanillaPopperOptions = { createPopper?: typeof createPopper } & {
   placement?: Placement;
-  modifiers?: Partial<Modifier<any, any>>[];
+  modifiers?: PopperOptions["modifiers"];
   strategy?: PositioningStrategy;
   onFirstUpdate?: ((state: Partial<PopperState>) => void) | undefined;
 };
 
 const EMPTY_MODIFIERS: PopperOptions["modifiers"] = [];
 
-export function useVanillaPopper(reference: HTMLElement | null, popupElement: HTMLElement | null, options: Options) {
+export function useVanillaPopper(
+  reference: HTMLElement | null,
+  popupElement: HTMLElement | null,
+  options: VanillaPopperOptions,
+) {
   const [popperInstance, setPopperInstance] = useState<PopperInstance>();
 
   const popperOptions = useMemo(() => {
