@@ -27,14 +27,26 @@ const emptyClientRect: DOMRectReadOnly = {
   toJSON: () => "empty",
 };
 
+interface Measure {
+  clientRect: DOMRectReadOnly;
+  contentRect: DOMRectReadOnly;
+}
+
+const emptyMeasures: Measure = { clientRect: emptyClientRect, contentRect: emptyClientRect };
+
 export function useMeasure() {
-  const [measure, setMeasure] = React.useState<{ clientRect: DOMRectReadOnly; contentRect: DOMRectReadOnly }>({
-    clientRect: emptyClientRect,
-    contentRect: emptyClientRect,
-  });
+  const [measure, setMeasure] = React.useState<Measure>(emptyMeasures);
   const [setElement, element] = useMeasureCallback(
     React.useCallback((clientRect, contentRect) => setMeasure({ clientRect, contentRect }), []),
   );
 
-  return [setElement, measure.clientRect, measure.contentRect, element] as const;
+  const handleSetElement = React.useCallback(
+    (element: HTMLElement | null | undefined) => {
+      if (element) return setElement(element);
+      setMeasure(emptyMeasures);
+    },
+    [setElement],
+  );
+
+  return [handleSetElement, measure.clientRect, measure.contentRect, element] as const;
 }
