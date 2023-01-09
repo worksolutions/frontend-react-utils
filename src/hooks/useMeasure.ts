@@ -2,19 +2,6 @@ import React from "react";
 
 import { useEffectSkipFirst } from "./common";
 
-export function useMeasureCallback(callback: (clientRect: DOMRectReadOnly, contentRect: DOMRectReadOnly) => void) {
-  const [element, setElement] = React.useState<HTMLElement | null | undefined>();
-
-  useEffectSkipFirst(() => {
-    if (!element) return () => null;
-    const observer = new ResizeObserver(([entry]) => callback(entry.target.getBoundingClientRect(), entry.contentRect));
-    observer.observe(element);
-    return () => observer.disconnect();
-  }, [element, callback]);
-
-  return [setElement, element] as const;
-}
-
 const emptyClientRect: DOMRectReadOnly = {
   height: 0,
   width: 0,
@@ -27,26 +14,32 @@ const emptyClientRect: DOMRectReadOnly = {
   toJSON: () => "empty",
 };
 
+export function useMeasureCallback(callback: (clientRect: DOMRectReadOnly, contentRect: DOMRectReadOnly) => void) {
+  const [element, setElement] = React.useState<HTMLElement | null | undefined>();
+
+  useEffectSkipFirst(() => {
+    if (!element) {
+      callback(emptyClientRect, emptyClientRect);
+      return () => null;
+    }
+    const observer = new ResizeObserver(([entry]) => callback(entry.target.getBoundingClientRect(), entry.contentRect));
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [element, callback]);
+
+  return [setElement, element] as const;
+}
+
 interface Measure {
   clientRect: DOMRectReadOnly;
   contentRect: DOMRectReadOnly;
 }
 
-const emptyMeasures: Measure = { clientRect: emptyClientRect, contentRect: emptyClientRect };
-
 export function useMeasure() {
-  const [measure, setMeasure] = React.useState<Measure>(emptyMeasures);
+  const [measure, setMeasure] = React.useState<Measure>({ clientRect: emptyClientRect, contentRect: emptyClientRect });
   const [setElement, element] = useMeasureCallback(
     React.useCallback((clientRect, contentRect) => setMeasure({ clientRect, contentRect }), []),
   );
 
-  const handleSetElement = React.useCallback(
-    (element: HTMLElement | null | undefined) => {
-      if (element) return setElement(element);
-      setMeasure(emptyMeasures);
-    },
-    [setElement],
-  );
-
-  return [handleSetElement, measure.clientRect, measure.contentRect, element] as const;
+  return [setElement, measure.clientRect, measure.contentRect, element] as const;
 }

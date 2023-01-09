@@ -23,7 +23,7 @@ export function useStickyEffectDetector(onChangeStickyEffect: (sticky: boolean) 
 
   const previousObserver = usePrevious(observer);
 
-  useEffectSkipFirst(() => previousObserver.disconnect(), [observer]);
+  useEffectSkipFirst(() => previousObserver.disconnect(), [observer, previousObserver]);
 
   return React.useMemo(
     () => (element?: HTMLElement) => {
