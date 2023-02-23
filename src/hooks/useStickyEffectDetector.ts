@@ -1,35 +1,32 @@
 import React from "react";
 
-import { useEffectSkipFirst, usePrevious } from "./common";
+import { useEffectSkipFirst } from "./common";
+import { useSyncToRef } from "./useSyncToRef";
 
 export function useStickyEffectDetector(onChangeStickyEffect: (sticky: boolean) => void) {
-  const onChangeStickyEffectRef = React.useRef(onChangeStickyEffect);
+  const [observer, setObserver] = React.useState<IntersectionObserver>();
+  const onChangeStickyEffectRef = useSyncToRef(onChangeStickyEffect);
+  React.useEffect(() => setObserver(createObserver(onChangeStickyEffectRef)), [onChangeStickyEffectRef]);
 
-  useEffectSkipFirst(() => {
-    onChangeStickyEffectRef.current = onChangeStickyEffect;
-  }, [onChangeStickyEffect]);
+  useEffectSkipFirst(() => () => observer?.disconnect(), [observer]);
 
-  const observer = React.useMemo(
-    () =>
-      new IntersectionObserver(
-        ([entry]) => {
-          if (entry.boundingClientRect.width === 0 || entry.boundingClientRect.height === 0) return;
-          onChangeStickyEffectRef.current(entry.intersectionRatio < 1);
-        },
-        { threshold: [1] },
-      ),
-    [],
-  );
+  const [observableElement, setObservableElement] = React.useState<HTMLElement>();
+  React.useEffect(() => {
+    if (!observer) return;
+    if (!observableElement) return observer.disconnect();
+    observer.observe(observableElement);
+    return () => observer.unobserve(observableElement);
+  }, [observableElement, observer]);
 
-  const previousObserver = usePrevious(observer);
+  return setObservableElement;
+}
 
-  useEffectSkipFirst(() => previousObserver.disconnect(), [observer, previousObserver]);
-
-  return React.useMemo(
-    () => (element?: HTMLElement) => {
-      if (!element) return;
-      observer.observe(element);
+function createObserver(callbackRef: React.MutableRefObject<(sticky: boolean) => void>) {
+  return new IntersectionObserver(
+    ([entry]) => {
+      if (entry.boundingClientRect.width === 0 || entry.boundingClientRect.height === 0) return;
+      callbackRef.current(entry.intersectionRatio < 1);
     },
-    [observer],
+    { threshold: [1] },
   );
 }

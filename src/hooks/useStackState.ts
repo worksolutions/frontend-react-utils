@@ -8,11 +8,8 @@ export function useStackState<ELEMENT>(initialStack?: ELEMENT[]) {
   const pop = React.useCallback(() => setStack(remove(-1, 1)), []);
   const reset = React.useCallback((newStack: ELEMENT[] = []) => setStack(newStack), []);
 
-  return React.useMemo(() => [stack, { length: stack.length, last: stackLast, push, pop, reset }] as const, [
-    stack,
-    stackLast,
-    push,
-    pop,
-    reset,
-  ]);
+  return React.useMemo(
+    () => [stack, { length: stack.length, last: stackLast, push, pop, reset }] as const,
+    [stack, stackLast, push, pop, reset],
+  );
 }
