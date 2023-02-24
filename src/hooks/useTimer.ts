@@ -14,7 +14,7 @@ export function useTimer({
   initialValue: () => number;
   tickHandler: (value: number) => number;
   finisher: (value: number) => boolean;
-  onSuccess?: () => void;
+  onSuccess?: (canceled: boolean) => void;
 }) {
   const forceUpdate = useForceUpdate();
   const timerRef = useRef<any>(null!);
@@ -27,7 +27,7 @@ export function useTimer({
       forceUpdate();
 
       if (finisher(valueRef.current)) {
-        if (onSuccess) onSuccess();
+        if (onSuccess) onSuccess(false);
         return;
       }
 
@@ -36,7 +36,7 @@ export function useTimer({
         forceUpdate();
         if (finisher(valueRef.current)) {
           clearInterval(timerRef.current);
-          if (onSuccess) onSuccess();
+          if (onSuccess) onSuccess(false);
         }
       }, interval);
     },
@@ -44,7 +44,7 @@ export function useTimer({
   );
 
   const stop = useCallback(() => {
-    if (onSuccess) onSuccess();
+    if (onSuccess) onSuccess(true);
     clearInterval(timerRef.current);
   }, [onSuccess]);
 
