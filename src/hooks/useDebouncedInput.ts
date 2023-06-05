@@ -14,7 +14,7 @@ export function useDebouncedInput<VALUE>(
   React.useEffect(() => setInputValue(value), [value]);
 
   const clear = React.useCallback(() => {
-    if (!clearValue) return;
+    if (clearValue === undefined) return;
     setInputValue(clearValue);
     onChangeDebounce.current(clearValue);
   }, [clearValue, onChangeDebounce]);
