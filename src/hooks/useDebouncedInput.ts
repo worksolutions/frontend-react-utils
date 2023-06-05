@@ -2,30 +2,29 @@ import React, { useState } from "react";
 
 import { useDebounceRef } from "./common";
 
-export function useDebouncedInput<VALUE>(
-  value: VALUE,
+export function useDebouncedInput(
+  value: string,
   debounceTime: number,
-  onChange: (value: VALUE) => void,
-  clearValue?: VALUE,
+  onChange: (value: string) => void,
+  clearValue = "",
 ) {
   const [inputValue, setInputValue] = useState(value);
   const onChangeDebounce = useDebounceRef(debounceTime, onChange);
 
   React.useEffect(() => setInputValue(value), [value]);
 
-  const clear = React.useCallback(() => {
-    if (!clearValue) return;
+  const handleClear = React.useCallback(() => {
     setInputValue(clearValue);
     onChangeDebounce.current(clearValue);
   }, [clearValue, onChangeDebounce]);
 
   const handleChangeInput = React.useCallback(
-    (value: VALUE) => {
+    (value: string) => {
       setInputValue(value);
       onChangeDebounce.current(value);
     },
     [onChangeDebounce],
   );
 
-  return { inputValue, clear, onInputChange: handleChangeInput };
+  return { inputValue, clear: handleClear, onInputChange: handleChangeInput };
 }
