@@ -11,7 +11,6 @@ export * from "./useTimer";
 export * from "./useStickyEffectDetector";
 export * from "./useEventEmitter";
 export * from "./useSyncToRef";
-export * from "./useObservableAsSimpleValue";
 export * from "./useObservableAsDeferredMemo";
 export * from "./useInfinityScroll";
 export * from "./useInfinityScrollByElement";
