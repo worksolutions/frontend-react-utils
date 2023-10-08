@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef } from "react";
-import { isNil } from "ramda";
+import { isNil } from "@worksolutions/utils";
 
 import { useForceUpdate } from "./common";
 

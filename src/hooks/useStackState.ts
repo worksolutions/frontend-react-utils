@@ -1,11 +1,10 @@
 import React from "react";
-import { append, remove, last } from "ramda";
 
 export function useStackState<ELEMENT>(initialStack?: ELEMENT[]) {
   const [stack, setStack] = React.useState(() => (initialStack ? [...initialStack] : []));
-  const stackLast = React.useMemo(() => last(stack), [stack]);
-  const push = React.useCallback((element: ELEMENT) => setStack(append(element)), []);
-  const pop = React.useCallback(() => setStack(remove(-1, 1)), []);
+  const stackLast = React.useMemo(() => stack[stack.length - 1], [stack]);
+  const push = React.useCallback((element: ELEMENT) => setStack((stack) => [...stack, element]), []);
+  const pop = React.useCallback(() => setStack((stack) => stack.slice(0, -1)), []);
   const reset = React.useCallback((newStack: ELEMENT[] = []) => setStack(newStack), []);
 
   return React.useMemo(

@@ -1,5 +1,5 @@
 import React from "react";
-import { identity } from "ramda";
+import { identity } from "@worksolutions/utils";
 
 function getWindowScrollPosition() {
   return { x: document.documentElement.scrollLeft, y: document.documentElement.scrollTop };

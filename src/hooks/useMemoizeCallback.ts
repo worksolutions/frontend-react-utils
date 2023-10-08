@@ -1,5 +1,5 @@
 import React, { DependencyList } from "react";
-import { memoizeWith } from "ramda";
+import { memoizeWith } from "@worksolutions/utils";
 
 /**
  * Memoize callback in React.useCallback hook

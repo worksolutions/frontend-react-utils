@@ -2,7 +2,6 @@
 
 import React, { DependencyList, useCallback } from "react";
 import { useMountedState } from "react-use";
-import { assoc } from "ramda";
 
 import { useSyncToRef } from "./useSyncToRef";
 
@@ -33,7 +32,7 @@ export function useAsyncFn<FUNC extends FunctionReturningPromise<any>>(
   const callback = useCallback((...args: Parameters<FUNC>) => {
     const callId = ++lastCallId.current;
 
-    if (!stateRef.current.loading && loadingAvailable.current) setState(assoc("loading", true));
+    if (!stateRef.current.loading && loadingAvailable.current) setState((value) => ({ ...value, loading: true }));
 
     return func(...args).then(
       (value) => {

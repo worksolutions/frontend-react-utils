@@ -1,8 +1,8 @@
 import React, { DependencyList } from "react";
-import {observe, toJS} from "mobx";
+import { observe, toJS } from "mobx";
 import { isPureObject } from "@worksolutions/utils";
 
-import {deepObserve} from "mobx-utils";
+import { deepObserve } from "mobx-utils";
 
 export type UseObservableAsDeferredMemoOptions = { fireImmediately?: boolean; convertToJS?: boolean; deep?: boolean };
 
@@ -30,7 +30,6 @@ export function useObservableAsDeferredMemo<RESULT, TARGET>(
 
   return value;
 }
-
 
 export function createObserverForStateHook(
   target: any,
