@@ -6,6 +6,7 @@ export * from "./special";
 export * from "./useAsyncFn";
 export * from "./useChildrenMeasure";
 export * from "./useDebouncedInput";
+export * from "./useDebouncedValue";
 export * from "./useMeasure";
 export * from "./useTimer";
 export * from "./useStickyEffectDetector";
