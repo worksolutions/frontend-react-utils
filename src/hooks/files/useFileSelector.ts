@@ -24,7 +24,7 @@ export function useFileSelector(
     [multiply, onChange],
   );
   const input = React.useMemo(
-    () => (process.browser ? createFileInput(handleChange, multiply, acceptTypes) : null),
+    () => (typeof window === "undefined" ? null : createFileInput(handleChange, multiply, acceptTypes)),
     [multiply, handleChange, acceptTypes],
   );
   const [dropAreaProps, dropAreaState] = useDropArea({ onFiles: handleChange });
