@@ -7,7 +7,9 @@ import { useSyncToRef } from "./useSyncToRef";
 type UseInfiniteScrollDirection = "down" | "up";
 
 interface UseInfinityScrollConfig {
-  loading: boolean;
+  loading?: boolean;
+  loadingRef?: React.MutableRefObject<boolean>;
+  waitLoadingMS?: number;
   hasNextPage: boolean;
   threshold?: number;
   startObservingDelay?: number;
@@ -36,14 +38,21 @@ const scrollRemainderDetectors = {
 export function useInfinityScroll({
   scrollCheckInterval = 200,
   threshold = 200,
-  loading,
+  waitLoadingMS,
+  loading: incomeLoading,
+  loadingRef: incomeLoadingRef,
   startObservingDelay = 0,
   direction = "down",
   hasNextPage,
   onLoadMore,
 }: UseInfinityScrollConfig) {
-  const [scrollableElement, setScrollableElement] = React.useState<ScrollableElement>(null);
-  const loadingRef = useSyncToRef(loading);
+  const [scrollableElement, setScrollableElement] = React.useState<ScrollableElement | null>(null);
+
+  const loadingRef1 = incomeLoadingRef;
+  const loadingRef2 = useSyncToRef(incomeLoading);
+
+  const loadingRef = useSyncToRef(loadingRef1?.current ?? loadingRef2.current ?? false);
+
   const hasNextPageRef = useSyncToRef(hasNextPage);
   const onLoadMoreRef = useSyncToRef(onLoadMore);
 
@@ -53,6 +62,7 @@ export function useInfinityScroll({
     startObservingDelay,
     scrollCheckInterval,
     direction,
+    waitLoadingMS,
     hasNextPage: hasNextPageRef,
     loading: loadingRef,
     onLoadMore: onLoadMoreRef,
@@ -73,6 +83,7 @@ function useScrollListener({
   scrollableElement,
   hasNextPage,
   loading,
+  waitLoadingMS,
   threshold,
   direction,
   onLoadMore,
@@ -86,16 +97,24 @@ function useScrollListener({
   direction: UseInfiniteScrollDirection;
   hasNextPage: React.MutableRefObject<boolean>;
   loading: React.MutableRefObject<boolean>;
+  waitLoadingMS: number | undefined;
   onLoadMore: React.MutableRefObject<() => void>;
 }) {
   React.useEffect(() => {
     if (!scrollableElement) return () => null;
 
+    let waitLoadingTimer: NodeJS.Timeout | null = null;
+
     const listener = throttle(function () {
       if (!hasNextPage.current || loading.current) return;
       const scrollToEnd = scrollRemainderDetectors[direction](scrollableElement);
       if (scrollToEnd > threshold) return;
-      onLoadMore.current();
+      if (waitLoadingMS === undefined) return onLoadMore.current();
+      clearTimeout(waitLoadingTimer!);
+      waitLoadingTimer = setTimeout(() => {
+        if (loading.current) return;
+        onLoadMore.current();
+      }, waitLoadingMS);
     }, scrollCheckInterval);
 
     const startObservingTimeout = setTimeout(
@@ -116,6 +135,7 @@ function useScrollListener({
     scrollCheckInterval,
     scrollableElement,
     threshold,
+    waitLoadingMS,
   ]);
 }
 

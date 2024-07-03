@@ -1,10 +1,8 @@
 import React from "react";
 
-import { useEffectSkipFirst } from "./common";
-
 export function useSyncToRef<T>(data: T) {
   const ref = React.useRef(data);
-  useEffectSkipFirst(() => {
+  React.useMemo(() => {
     ref.current = data;
   }, [data]);
   return ref;
