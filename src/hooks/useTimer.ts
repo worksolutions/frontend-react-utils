@@ -32,19 +32,14 @@ export function useTimer({ finisher, tickHandler, initialValue, interval, onSucc
     return () => clearInterval(timer);
   }, [enabled, finisher, interval, onSuccess, tickHandler, valueRef]);
 
-  const start = React.useCallback(
-    (startSeconds?: number) => {
-      if (enabled) return;
-      setValue(isNil(startSeconds) ? value : startSeconds);
-      enable();
-    },
-    [enabled, value, enable],
-  );
+  const start = React.useCallback(() => enable(), [enable]);
 
   const stop = React.useCallback(() => {
     onStop?.();
     disable();
   }, [disable, onStop]);
 
-  return { value, start, stop };
+  const reset = React.useCallback(() => setValue(initialValue), [initialValue]);
+
+  return { value, start, stop, reset };
 }
