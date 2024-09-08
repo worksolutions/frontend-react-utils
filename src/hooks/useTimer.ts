@@ -1,61 +1,50 @@
-import { useCallback, useEffect, useRef } from "react";
+import React from "react";
 import { isNil } from "@worksolutions/utils";
 
-import { useForceUpdate } from "./common";
+import { useBoolean } from "./common";
+import { useSyncToRef } from "./useSyncToRef";
 
-export function useTimer({
-  finisher,
-  tickHandler,
-  initialValue,
-  interval,
-  onSuccess,
-}: {
+interface TimerOptions {
   interval: number;
-  initialValue: () => number;
+  initialValue: number;
   tickHandler: (value: number) => number;
   finisher: (value: number) => boolean;
-  onSuccess?: (canceled: boolean) => void;
-}) {
-  const forceUpdate = useForceUpdate();
-  const timerRef = useRef<any>(null!);
-  const valueRef = useRef(initialValue() || 0);
+  onSuccess?: () => void;
+  onStop?: () => void;
+}
 
-  const start = useCallback(
-    (seconds?: number) => {
-      clearInterval(timerRef.current);
-      valueRef.current = isNil(seconds) ? initialValue() : seconds;
-      forceUpdate();
+export function useTimer({ finisher, tickHandler, initialValue, interval, onSuccess, onStop }: TimerOptions) {
+  const [value, setValue] = React.useState(initialValue);
+  const valueRef = useSyncToRef(value);
+  const [enabled, enable, disable] = useBoolean(false);
 
-      if (finisher(valueRef.current)) {
-        if (onSuccess) onSuccess(false);
-        return;
-      }
+  React.useEffect(() => {
+    if (!enabled) return;
+    if (finisher(valueRef.current)) return void onSuccess?.();
+    const timer = setInterval(() => {
+      const newValue = tickHandler(valueRef.current);
+      setValue(newValue);
+      if (!finisher(valueRef.current)) return;
+      clearInterval(timer);
+      onSuccess?.();
+    }, interval);
 
-      timerRef.current = setInterval(() => {
-        valueRef.current = tickHandler(valueRef.current);
-        forceUpdate();
-        if (finisher(valueRef.current)) {
-          clearInterval(timerRef.current);
-          if (onSuccess) onSuccess(false);
-        }
-      }, interval);
+    return () => clearInterval(timer);
+  }, [enabled, finisher, interval, onSuccess, tickHandler, valueRef]);
+
+  const start = React.useCallback(
+    (startSeconds?: number) => {
+      if (enabled) return;
+      setValue(isNil(startSeconds) ? value : startSeconds);
+      enable();
     },
-    [finisher, forceUpdate, tickHandler, initialValue, interval, onSuccess],
+    [enabled, value, enable],
   );
 
-  const stop = useCallback(() => {
-    if (onSuccess) onSuccess(true);
-    clearInterval(timerRef.current);
-  }, [onSuccess]);
+  const stop = React.useCallback(() => {
+    onStop?.();
+    disable();
+  }, [disable, onStop]);
 
-  useEffect(() => {
-    valueRef.current = initialValue();
-    return () => clearInterval(timerRef.current);
-  }, [initialValue]);
-
-  return {
-    value: valueRef.current,
-    start,
-    stop,
-  };
+  return { value, start, stop };
 }
