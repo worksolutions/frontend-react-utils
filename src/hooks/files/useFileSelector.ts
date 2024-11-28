@@ -1,22 +1,22 @@
 import React from "react";
 import { useDropArea } from "react-use";
-import { AcceptTypes, convertFileToFileInterface, createFileInput, FileInterface } from "@worksolutions/utils";
+import { convertFileToFileInterface, createFileInput, FileInterface } from "@worksolutions/utils";
 
 type Result = { dropAreaProps: ReturnType<typeof useDropArea>[0]; dropping: boolean; openNativeFileDialog: () => void };
 
 export function useFileSelector(
   onChange: (files: FileInterface[]) => void,
-  options: { acceptTypes?: AcceptTypes[]; multiply: true },
+  options: { acceptTypes?: string; multiply: true },
 ): Result;
 
 export function useFileSelector(
   onChange: (files: FileInterface) => void,
-  options: { acceptTypes?: AcceptTypes[]; multiply: false },
+  options: { acceptTypes?: string; multiply: false },
 ): Result;
 
 export function useFileSelector(
   onChange: ((files: FileInterface) => void) | ((files: FileInterface[]) => void),
-  { acceptTypes, multiply }: { acceptTypes?: AcceptTypes[]; multiply: boolean },
+  { acceptTypes, multiply }: { acceptTypes?: string; multiply: boolean },
 ) {
   const handleChange = React.useCallback(
     (files: File[]) =>

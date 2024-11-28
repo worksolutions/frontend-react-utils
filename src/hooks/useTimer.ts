@@ -1,5 +1,4 @@
 import React from "react";
-import { isNil } from "@worksolutions/utils";
 
 import { useBoolean } from "./common";
 import { useSyncToRef } from "./useSyncToRef";

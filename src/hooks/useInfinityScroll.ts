@@ -101,7 +101,7 @@ function useScrollListener({
   onLoadMore: React.MutableRefObject<() => void>;
 }) {
   React.useEffect(() => {
-    if (!scrollableElement) return () => null;
+    if (!scrollableElement) return;
 
     let waitLoadingTimer: NodeJS.Timeout | null = null;
 
